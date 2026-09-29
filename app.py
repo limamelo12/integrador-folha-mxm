@@ -25,6 +25,11 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
+    /* Force Light Color Scheme Globally */
+    :root {
+        color-scheme: light !important;
+    }
+
     /* Global fonts and background */
     html, body, [class*="css"], .stText {
         font-family: 'Inter', sans-serif;
@@ -89,6 +94,71 @@ st.markdown("""
         letter-spacing: 0.05em;
     }
     
+    /* File Uploader - Crisp White Box replacing black block */
+    [data-testid="stFileUploader"] {
+        background-color: #ffffff !important;
+        border: 1px solid #dcdad5 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02) !important;
+    }
+    [data-testid="stFileUploader"] section {
+        background-color: #faf9f6 !important;
+        border: 2px dashed #dcdad5 !important;
+        border-radius: 8px !important;
+    }
+    [data-testid="stFileUploader"] section * {
+        color: #0b0b0b !important;
+    }
+    [data-testid="stFileUploader"] section svg {
+        fill: #555555 !important;
+    }
+    [data-testid="stFileUploader"] button {
+        background-color: #ffffff !important;
+        color: #0b0b0b !important;
+        border: 1px solid #dcdad5 !important;
+        font-weight: 500 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    }
+    [data-testid="stFileUploader"] button:hover {
+        background-color: #f4f2ee !important;
+        border-color: #c8c6c0 !important;
+    }
+    
+    /* Inputs, Selectboxes, and Textareas - Clean White replacing black inputs */
+    div[data-baseweb="input"], 
+    div[data-baseweb="base-input"],
+    div[data-baseweb="select"] > div {
+        background-color: #ffffff !important;
+        border: 1px solid #dcdad5 !important;
+        border-radius: 8px !important;
+        color: #0b0b0b !important;
+    }
+    div[data-baseweb="input"] input,
+    div[data-baseweb="base-input"] input,
+    div[data-baseweb="select"] input {
+        background-color: #ffffff !important;
+        color: #0b0b0b !important;
+        -webkit-text-fill-color: #0b0b0b !important;
+    }
+    div[data-baseweb="select"] * {
+        color: #0b0b0b !important;
+    }
+    div[data-baseweb="select"] svg {
+        fill: #0b0b0b !important;
+    }
+
+    /* Dataframe and Data Editor Tables - Light White Styling */
+    [data-testid="stDataFrame"], 
+    [data-testid="stDataEditor"],
+    div[data-testid="stDataFrame"] > div,
+    div[data-testid="stDataEditor"] > div {
+        background-color: #ffffff !important;
+        border: 1px solid #e2ded7 !important;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02) !important;
+    }
+    
     /* Card design - Pérola/White hybrid */
     .custom-card {
         background: #ffffff !important;
@@ -104,6 +174,26 @@ st.markdown("""
         color: #0b0b0b !important;
     }
     
+    /* Expander - Clean White */
+    [data-testid="stExpander"] {
+        background-color: #ffffff !important;
+        border: 1px solid #e2ded7 !important;
+        border-radius: 10px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    }
+    [data-testid="stExpander"] details {
+        background-color: #ffffff !important;
+    }
+    [data-testid="stExpander"] summary {
+        color: #0b0b0b !important;
+    }
+    [data-testid="stExpander"] summary:hover {
+        color: #0b0b0b !important;
+    }
+    [data-testid="stExpander"] summary svg {
+        fill: #0b0b0b !important;
+    }
+
     .status-badge {
         display: inline-block;
         padding: 6px 12px;
@@ -128,17 +218,44 @@ st.markdown("""
         background: #ffc220 !important; /* Diamante Amarelo background */
         color: #0b0b0b !important; /* Preto Ônix text */
         font-weight: 600 !important;
-        border: None !important;
+        border: 1px solid #e0ab1c !important;
         border-radius: 8px !important;
-        padding: 0.5rem 1.5rem !important;
+        padding: 0.5rem 1.4rem !important;
         transition: all 0.2s ease !important;
+        box-shadow: 0 2px 4px rgba(255, 194, 32, 0.15) !important;
     }
     .stButton>button:hover {
         background: #e0ab1c !important; /* slightly darker gold */
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(255, 194, 32, 0.3);
+        box-shadow: 0 4px 12px rgba(255, 194, 32, 0.3) !important;
+        color: #0b0b0b !important;
+    }
+    .stButton>button * {
+        color: #0b0b0b !important;
     }
     
+    /* Download Buttons */
+    .stDownloadButton>button {
+        background: #ffc220 !important;
+        color: #0b0b0b !important;
+        font-weight: 600 !important;
+        border: 1px solid #e0ab1c !important;
+        border-radius: 8px !important;
+        padding: 0.6rem 1.6rem !important;
+    }
+    .stDownloadButton>button:hover {
+        background: #e0ab1c !important;
+        color: #0b0b0b !important;
+    }
+    .stDownloadButton>button * {
+        color: #0b0b0b !important;
+    }
+
+    /* Radio buttons and checkboxes */
+    div[data-testid="stRadio"] label, div[data-testid="stCheckbox"] label {
+        color: #0b0b0b !important;
+    }
+
     /* Footer */
     .footer {
         text-align: center;
