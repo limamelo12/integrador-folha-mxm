@@ -7,6 +7,16 @@ import tempfile
 import urllib.request
 import json
 from datetime import datetime, timezone, timedelta
+import importlib
+
+import pdf_parser
+import accounting_engine
+
+try:
+    importlib.reload(pdf_parser)
+    importlib.reload(accounting_engine)
+except Exception:
+    pass
 
 from pdf_parser import parse_payroll_pdf
 from accounting_engine import load_mapping, save_mapping, generate_entries, write_to_excel_template
@@ -1452,10 +1462,10 @@ if uploaded_pdf is not None and meta is not None:
         entry_results = generate_entries(
             consolidated_parsed_data, 
             current_mapping, 
-            batch_number=lote_contabil, 
-            entry_date=formatted_date, 
-            doc_number=documento_id,
-            process_type=selected_proc
+            batch_number=str(lote_contabil or "1"), 
+            entry_date=str(formatted_date or ""), 
+            doc_number=str(documento_id or "FOLHA"),
+            process_type=str(selected_proc or "folha")
         )
         for ue in entry_results.get('unmapped_events', []):
             if 'filial' not in ue:
@@ -1507,10 +1517,10 @@ if uploaded_pdf is not None and meta is not None:
             res = generate_entries(
                 f_active_parsed_data, 
                 current_mapping, 
-                batch_number=lote_contabil, 
-                entry_date=formatted_date, 
-                doc_number=documento_id,
-                process_type=selected_proc
+                batch_number=str(lote_contabil or "1"), 
+                entry_date=str(formatted_date or ""), 
+                doc_number=str(documento_id or "FOLHA"),
+                process_type=str(selected_proc or "folha")
             )
             
             for row in res['rows']:

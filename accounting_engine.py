@@ -25,7 +25,7 @@ def save_mapping(mapping, config_path):
         print(f"Error saving mapping: {str(e)}")
         return False
 
-def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, doc_number="FOLHA", process_type=None):
+def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, doc_number="FOLHA", process_type=None, *args, **kwargs):
     """
     Generates accounting entry rows based on parsed events and user mapping.
     
@@ -43,10 +43,17 @@ def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, do
     empresa_code = meta.get('empresa_codigo', '0001')
     
     # Process social charges as virtual events if present
-    sc = parsed_data.get('social_charges', {})
+    sc = parsed_data.get('social_charges') or {}
     if sc:
-        patronal_total = sc.get('gps_empresa_func', 0.0) + sc.get('gps_empresa_socios', 0.0) + sc.get('gps_empresa_auton', 0.0)
-        gps_total = patronal_total + sc.get('gps_rat', 0.0) + sc.get('gps_terceiros', 0.0)
+        func_val = float(sc.get('gps_empresa_func') or 0.0)
+        socios_val = float(sc.get('gps_empresa_socios') or 0.0)
+        auton_val = float(sc.get('gps_empresa_auton') or 0.0)
+        rat_val = float(sc.get('gps_rat') or 0.0)
+        terc_val = float(sc.get('gps_terceiros') or 0.0)
+        fgts_val = float(sc.get('fgts_total') or 0.0)
+
+        patronal_total = func_val + socios_val + auton_val
+        gps_total = patronal_total + rat_val + terc_val
         
         # If mapping specifically maps consolidated GPS instead of detailed GPS_PATRONAL:
         if 'GPS' in mapping and 'GPS_PATRONAL' not in mapping:
@@ -67,27 +74,27 @@ def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, do
                     'section': 'social_charges',
                     'type': 'encargo'
                 })
-            if abs(sc.get('gps_rat', 0.0)) >= 0.01:
+            if abs(rat_val) >= 0.01:
                 events.append({
                     'code': 'GPS_RAT',
                     'description': 'INSS RAT/FAP',
-                    'total': sc['gps_rat'],
+                    'total': rat_val,
                     'section': 'social_charges',
                     'type': 'encargo'
                 })
-            if abs(sc.get('gps_terceiros', 0.0)) >= 0.01:
+            if abs(terc_val) >= 0.01:
                 events.append({
                     'code': 'GPS_TERCEIROS',
                     'description': 'INSS Terceiros',
-                    'total': sc['gps_terceiros'],
+                    'total': terc_val,
                     'section': 'social_charges',
                     'type': 'encargo'
                 })
-        if abs(sc.get('fgts_total', 0.0)) >= 0.01:
+        if abs(fgts_val) >= 0.01:
             events.append({
                 'code': 'FGTS',
                 'description': 'FGTS',
-                'total': sc['fgts_total'],
+                'total': fgts_val,
                 'section': 'social_charges',
                 'type': 'encargo'
             })
@@ -188,9 +195,12 @@ def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, do
     
     # Process each event
     for ev in events:
-        code = ev['code']
-        desc = ev['description']
-        amount = ev['total']
+        code = str(ev.get('code', '')).strip()
+        desc = str(ev.get('description', '')).strip()
+        try:
+            amount = float(ev.get('total') or 0.0)
+        except (ValueError, TypeError):
+            amount = 0.0
         
         # Skip events with zero value
         if abs(amount) < 0.01:
