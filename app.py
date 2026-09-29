@@ -502,25 +502,26 @@ def render_home_page():
             st.rerun()
 
     with col2:
-        # Card 2: Fechamento Contábil & Auditoria
+        # Card 2: Fechamento Contábil & Auditoria - Operational
         st.markdown("""
-        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 310px;'>
+        <div class="custom-card" style='border-left: 4px solid #047857; min-height: 310px;'>
             <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
                 <div style='font-size: 1.6rem;'>📋</div>
-                <span class='badge-soon'>🟡 Em Desenvolvimento</span>
+                <span class='badge-active'>🟢 Operacional</span>
             </div>
             <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Fechamento Contábil & Auditoria</h4>
             <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 65px;'>
-                Checklist inteligente de encerramento mensal, batimento de saldos patrimoniais, conciliação Intercompany e pré-validação de balancete.
+                Auditoria de balancete, detecção automática de contas viradas, apuração de equivalência patrimonial (MEP) e checklist mensal.
             </p>
             <div style='margin-bottom: 18px;'>
+                <span class='tag-chip'>Contas Viradas</span>
+                <span class='tag-chip'>Equivalência (MEP)</span>
+                <span class='tag-chip'>Auditoria Balancete</span>
                 <span class='tag-chip'>Checklist Mensal</span>
-                <span class='tag-chip'>Intercompany</span>
-                <span class='tag-chip'>Auditoria de Contas</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_fechamento", use_container_width=True):
+        if st.button("Acessar Fechamento Contábil ➔", key="btn_hub_fechamento", type="primary", use_container_width=True):
             st.session_state.current_page = "fechamento"
             st.rerun()
 
@@ -547,46 +548,521 @@ def render_home_page():
             st.session_state.current_page = "ativo"
             st.rerun()
 
-    # Bottom Information Panel
-    st.markdown("---")
-    st.markdown("""
-    <div style='background: #ffffff; border: 1px solid #e2ded7; border-radius: 12px; padding: 20px; display: flex; justify-content: space-around; align-items: center; text-align: center;'>
-        <div>
-            <div style='font-size: 1.5rem; font-weight: 700; color: #0b0b0b;'>3</div>
-            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Módulos Contábeis</div>
+
+
+
+def render_fechamento_contabil():
+    import io
+    
+    # Top Bar / Breadcrumb
+    col_top_back, col_top_title = st.columns([1.5, 4])
+    with col_top_back:
+        if st.button("⬅ Hub de Rotinas", key="btn_back_home_fechamento"):
+            st.session_state.current_page = "home"
+            st.rerun()
+    with col_top_title:
+        st.markdown("<div style='font-size: 0.88rem; color: #64748b; padding-top: 6px;'><b>Portal Contábil Monte Carlo</b> &nbsp;/&nbsp; <span>Fechamento Contábil & Auditoria</span></div>", unsafe_allow_html=True)
+
+    st.markdown("## 📋 Fechamento Contábil & Auditoria")
+    st.markdown("<p style='color: #475569; font-size: 1.02rem; margin-top: -8px;'>Rotinas e ferramentas avançadas para encerramento de período, auditoria de balancete e conciliações societárias.</p>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+    tab_viradas, tab_mep, tab_checklist = st.tabs([
+        "🔍 Verificação de Contas Viradas",
+        "⚖️ Equivalência Patrimonial (MEP)",
+        "📋 Checklist de Fechamento"
+    ])
+
+    # -------------------------------------------------------------
+    # TAB 1: Auditoria de Contas Viradas (Balancete)
+    # -------------------------------------------------------------
+    with tab_viradas:
+        st.markdown("### 🔍 Verificação de Contas Viradas (Saldos Invertidos)")
+        st.markdown("Analisa o balancete contábil verificando se contas de Ativo, Passivo, Custos, Despesas e Receitas apresentam saldos contrários à sua natureza contábil, diferenciando contas retificadoras legítimas de inconsistências operacionais.")
+
+        col_cfg1, col_cfg2, col_cfg3 = st.columns([1.5, 1.2, 1.8])
+        with col_cfg1:
+            emp_auditoria = st.selectbox(
+                "Empresa Auditada",
+                options=["0001", "0002", "0003"],
+                format_func=lambda x: {
+                    "0001": "0001 - Monte Carlo Joias (Via Parque)",
+                    "0002": "0002 - Jasper Forest Participações (Holding)",
+                    "0003": "0003 - MC Indústria de Joias (Fábrica)"
+                }.get(x, x),
+                key="sel_emp_auditoria"
+            )
+        with col_cfg2:
+            periodo_ref = st.text_input("Período de Referência", value="05/2026", key="txt_periodo_auditoria", help="Mês e ano do balancete contábil analisado.")
+        with col_cfg3:
+            modo_dados = st.radio(
+                "Origem dos Dados do Balancete:",
+                options=["🧪 Balancete Demonstrativo Monte Carlo", "📤 Importar Balancete (Excel / CSV)"],
+                horizontal=True,
+                key="radio_modo_balancete"
+            )
+
+        df_raw = None
+        if modo_dados.startswith("🧪"):
+            # Dados demonstrativos realistas da Monte Carlo
+            demo_data = [
+                {"conta": "1.1.1.01.0001", "descricao": "Caixa Geral - Lojas", "saldo": 28450.00, "dc": "D"},
+                {"conta": "1.1.1.02.0001", "descricao": "Banco Itaú - Conta Movimento", "saldo": 145200.50, "dc": "D"},
+                {"conta": "1.1.1.02.0002", "descricao": "Banco Santander - Conta Movimento", "saldo": 15420.00, "dc": "C"},
+                {"conta": "1.1.2.01.0001", "descricao": "Clientes a Receber - Cartões de Crédito", "saldo": 680000.00, "dc": "D"},
+                {"conta": "1.1.2.01.0005", "descricao": "(-) Perdas Estimadas com Créditos (PCLD)", "saldo": 12500.00, "dc": "C"},
+                {"conta": "1.1.3.01.0001", "descricao": "Estoques de Joias Acabadas", "saldo": 1250000.00, "dc": "D"},
+                {"conta": "1.2.3.01.0001", "descricao": "Máquinas e Equipamentos da Fábrica", "saldo": 840000.00, "dc": "D"},
+                {"conta": "1.2.3.01.0010", "descricao": "(-) Depreciação Acumulada - Máquinas", "saldo": 154000.00, "dc": "C"},
+                {"conta": "2.1.1.01.0001", "descricao": "Fornecedores Nacionais de Ouro e Gemas", "saldo": 310000.00, "dc": "C"},
+                {"conta": "2.1.1.01.0088", "descricao": "Fornecedor XYZ - Pagamento a Maior", "saldo": 8950.00, "dc": "D"},
+                {"conta": "2.1.2.01.0001", "descricao": "Salários e Ordenados a Pagar", "saldo": 98400.00, "dc": "C"},
+                {"conta": "2.1.2.01.0005", "descricao": "INSS a Recolher", "saldo": 34200.00, "dc": "C"},
+                {"conta": "2.1.2.01.0002", "descricao": "FGTS a Recolher", "saldo": 18250.00, "dc": "C"},
+                {"conta": "5.1.1.01.0001", "descricao": "Despesas com Pessoal - Salários", "saldo": 450000.00, "dc": "D"},
+                {"conta": "5.1.1.01.0030", "descricao": "Despesas com Viagens e Representação", "saldo": 2400.00, "dc": "C"},
+                {"conta": "4.1.1.01.0001", "descricao": "Receita Bruta com Venda de Joias", "saldo": 2150000.00, "dc": "C"},
+                {"conta": "4.1.1.02.0001", "descricao": "(-) Devoluções e Cancelamentos de Vendas", "saldo": 24500.00, "dc": "D"},
+                {"conta": "4.1.1.02.0005", "descricao": "(-) ICMS e Impostos sobre Vendas", "saldo": 185000.00, "dc": "D"}
+            ]
+            df_raw = pd.DataFrame(demo_data)
+        else:
+            file_balancete = st.file_uploader(
+                "Carregar Arquivo do Balancete (Excel ou CSV exportado do MXM):",
+                type=["xlsx", "xls", "csv"],
+                key="uploader_balancete"
+            )
+            if file_balancete is not None:
+                try:
+                    if file_balancete.name.lower().endswith(".csv"):
+                        df_raw = pd.read_csv(file_balancete, sep=None, engine='python')
+                    else:
+                        df_raw = pd.read_excel(file_balancete)
+                    st.success(f"Arquivo '{file_balancete.name}' carregado com sucesso ({len(df_raw)} linhas).")
+                except Exception as e:
+                    st.error(f"Erro ao ler arquivo de balancete: {e}")
+
+        if df_raw is not None and not df_raw.empty:
+            # Flexible column finder
+            def get_col(candidates):
+                for c in df_raw.columns:
+                    c_clean = str(c).lower().replace(".", "").replace("_", " ").strip()
+                    for cand in candidates:
+                        if cand in c_clean:
+                            return c
+                return None
+
+            c_conta = get_col(["conta", "codigo", "classificacao", "cod"])
+            c_desc = get_col(["descricao", "nome", "titulo", "desc"])
+            c_saldo = get_col(["saldo", "saldo final", "saldo atual", "valor", "atual"])
+            c_dc = get_col(["dc", "natureza", "debito credito", "tipo", "indicador"])
+
+            if not c_conta or not c_saldo:
+                st.warning("⚠️ Não foi possível identificar automaticamente as colunas de Conta e Saldo. Selecione-as manualmente abaixo:")
+                col_sel1, col_sel2, col_sel3 = st.columns(3)
+                with col_sel1:
+                    c_conta = st.selectbox("Coluna da Conta:", options=list(df_raw.columns), index=0)
+                with col_sel2:
+                    c_desc = st.selectbox("Coluna da Descrição:", options=list(df_raw.columns), index=min(1, len(df_raw.columns)-1))
+                with col_sel3:
+                    c_saldo = st.selectbox("Coluna do Saldo:", options=list(df_raw.columns), index=min(2, len(df_raw.columns)-1))
+
+            # Audit processing
+            audit_rows = []
+            for _, row in df_raw.iterrows():
+                conta_val = str(row[c_conta]).strip() if pd.notna(row[c_conta]) else ""
+                desc_val = str(row[c_desc]).strip() if c_desc and pd.notna(row[c_desc]) else ""
+                saldo_raw = row[c_saldo] if pd.notna(row[c_saldo]) else 0.0
+                dc_raw = str(row[c_dc]).strip().upper() if c_dc and pd.notna(row[c_dc]) else ""
+
+                if not conta_val or conta_val.lower() in ("nan", "total", "subtotal"):
+                    continue
+
+                # Parse numeric saldo
+                try:
+                    if isinstance(saldo_raw, str):
+                        s_clean = saldo_raw.replace("R$", "").replace(" ", "").replace(".", "").replace(",", ".")
+                        val_num = float(s_clean)
+                    else:
+                        val_num = float(saldo_raw)
+                except Exception:
+                    val_num = 0.0
+
+                if abs(val_num) < 0.001:
+                    continue
+
+                # Determine D or C
+                if dc_raw in ("D", "DEB", "DEBITO"):
+                    detected_dc = "D"
+                elif dc_raw in ("C", "CRED", "CREDITO"):
+                    detected_dc = "C"
+                else:
+                    detected_dc = "C" if val_num < 0 else "D"
+
+                abs_val = abs(val_num)
+                clean_digits = re.sub(r"\D", "", conta_val)
+                first_digit = clean_digits[0] if clean_digits else ""
+                desc_upper = desc_val.upper()
+
+                # Detect redutora
+                is_redutora = any(k in desc_upper for k in [
+                    "(-)", "DEPRECIA", "AMORTIZA", "PCLD", "PERDAS", "PROVISAO PARA", 
+                    "REDUTORA", "PREJUIZO", "ACOES EM TESOURARIA", "DEVOLU", "DESCONTO", "DEDUCAO"
+                ])
+
+                expected_dc = "D"
+                status = "REGULAR"
+                diagnostico = "Saldo regular em conformidade com a natureza da conta."
+                grupo_nome = {
+                    "1": "Ativo",
+                    "2": "Passivo / PL",
+                    "3": "Custos",
+                    "4": "Receitas",
+                    "5": "Despesas"
+                }.get(first_digit, "Outros")
+
+                if first_digit == "1":
+                    expected_dc = "C" if is_redutora else "D"
+                    if detected_dc != expected_dc:
+                        status = "INVERTIDA"
+                        diagnostico = "Ativo com saldo credor. Indício de conta corrente com saldo negativo (cheque especial) ou adiantamento a reclassificar para o Passivo."
+                    elif is_redutora:
+                        status = "REDUTORA"
+                        diagnostico = "Conta retificadora do Ativo com saldo credor regular."
+
+                elif first_digit == "2":
+                    expected_dc = "D" if is_redutora else "C"
+                    if detected_dc != expected_dc:
+                        status = "INVERTIDA"
+                        diagnostico = "Passivo com saldo devedor. Pagamento em duplicidade ou antecipação a fornecedores que deve ser reclassificado para o Ativo Circulante."
+                    elif is_redutora:
+                        status = "REDUTORA"
+                        diagnostico = "Conta retificadora do Patrimônio Líquido com saldo devedor regular."
+
+                elif first_digit in ("3", "5"):
+                    expected_dc = "D"
+                    if detected_dc != "D":
+                        status = "INVERTIDA"
+                        diagnostico = "Conta de despesa/custo com saldo credor. Verificar se houve estorno lançado a maior ou crédito indevido em conta de resultado."
+
+                elif first_digit == "4":
+                    expected_dc = "D" if is_redutora else "C"
+                    if detected_dc != expected_dc:
+                        status = "INVERTIDA"
+                        diagnostico = "Conta de receita com saldo devedor fora do grupo de deduções. Verificar estorno ou inversão de lançamento."
+                    elif is_redutora:
+                        status = "REDUTORA"
+                        diagnostico = "Dedução da receita bruta com saldo devedor regular."
+
+                audit_rows.append({
+                    "Conta": conta_val,
+                    "Descrição": desc_val,
+                    "Grupo": grupo_nome,
+                    "Natureza Esperada": expected_dc,
+                    "D/C Atual": detected_dc,
+                    "Saldo (R$)": abs_val,
+                    "Status": status,
+                    "Parecer Técnico / Diagnóstico": diagnostico
+                })
+
+            df_audit = pd.DataFrame(audit_rows)
+
+            tot_analisadas = len(df_audit)
+            tot_invertidas = (df_audit["Status"] == "INVERTIDA").sum()
+            tot_redutoras = (df_audit["Status"] == "REDUTORA").sum()
+            tot_regulares = (df_audit["Status"] == "REGULAR").sum()
+            val_divergencia = df_audit[df_audit["Status"] == "INVERTIDA"]["Saldo (R$)"].sum()
+
+            # Metric Cards
+            m1, m2, m3, m4 = st.columns(4)
+            with m1:
+                st.metric("Total de Contas", f"{tot_analisadas}")
+            with m2:
+                st.metric("Contas Regulares", f"{tot_regulares}", delta="✅ Conforme", delta_color="normal")
+            with m3:
+                st.metric("Contas Viradas (Invertidas)", f"{tot_invertidas}", delta=f"-R$ {val_divergencia:,.2f}" if tot_invertidas > 0 else "Nenhuma", delta_color="inverse")
+            with m4:
+                st.metric("Contas Redutoras", f"{tot_redutoras}", delta="🟡 Retificadoras", delta_color="off")
+
+            st.markdown("---")
+
+            # Filter options
+            col_f1, col_f2 = st.columns([2, 1])
+            with col_f1:
+                filtro_inconsistencias = st.checkbox("🎯 Exibir somente contas viradas (Inconsistências para correção)", value=(tot_invertidas > 0))
+            with col_f2:
+                grupos_sel = st.multiselect("Filtrar Grupos:", options=["Ativo", "Passivo / PL", "Despesas", "Receitas", "Custos"], default=["Ativo", "Passivo / PL", "Despesas", "Receitas", "Custos"])
+
+            df_display = df_audit.copy()
+            if filtro_inconsistencias:
+                df_display = df_display[df_display["Status"] == "INVERTIDA"]
+            if grupos_sel:
+                df_display = df_display[df_display["Grupo"].isin(grupos_sel)]
+
+            # Styling table with status badges
+            def format_status(val):
+                if val == "INVERTIDA":
+                    return "background-color: #fee2e2; color: #991b1b; font-weight: 700;"
+                elif val == "REDUTORA":
+                    return "background-color: #fef3c7; color: #92400e; font-weight: 600;"
+                else:
+                    return "background-color: #ecfdf5; color: #047857; font-weight: 600;"
+
+            st.dataframe(
+                df_display.style.applymap(format_status, subset=["Status"]).format({
+                    "Saldo (R$)": "R$ {:,.2f}"
+                }),
+                use_container_width=True,
+                hide_index=True
+            )
+
+            # Export Excel
+            col_exp1, col_exp2 = st.columns([1.5, 3])
+            with col_exp1:
+                excel_buffer = io.BytesIO()
+                with pd.ExcelWriter(excel_buffer, engine='openpyxl') as writer:
+                    df_audit.to_excel(writer, index=False, sheet_name="Auditoria_Balancete")
+                excel_buffer.seek(0)
+                st.download_button(
+                    "📥 Baixar Relatório de Auditoria (.xlsx)",
+                    data=excel_buffer.getvalue(),
+                    file_name=f"Auditoria_Balancete_Empresa_{emp_auditoria}_{periodo_ref.replace('/', '_')}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    use_container_width=True
+                )
+
+    # -------------------------------------------------------------
+    # TAB 2: Equivalência Patrimonial (MEP)
+    # -------------------------------------------------------------
+    with tab_mep:
+        st.markdown("### ⚖️ Apuração e Geração de Equivalência Patrimonial (MEP)")
+        st.markdown("Cálculo da variação patrimonial nas investidas da Holding (**Empresa 0002 - Jasper Forest Participações Ltda**) e geração do lote contábil compatível com o ERP MXM.")
+
+        st.markdown("""
+        <div style='background: #ffffff; border: 1px solid #e2ded7; border-radius: 10px; padding: 15px; margin-bottom: 20px;'>
+            <table style='width: 100%; border-collapse: collapse;'>
+                <tr>
+                    <td style='color: #64748b; font-size: 0.85rem; width: 25%; font-weight: 600;'>EMPRESA INVESTIDORA (HOLDING):</td>
+                    <td style='color: #0b0b0b; font-size: 0.95rem; font-weight: 700;'>0002 - JASPER FOREST PARTICIPAÇÕES LTDA</td>
+                    <td style='color: #64748b; font-size: 0.85rem; width: 18%; font-weight: 600;'>CENTRO DE CUSTO (DRE):</td>
+                    <td style='color: #0b0b0b; font-size: 0.95rem; font-weight: 700;'>2DIR (Diretoria)</td>
+                </tr>
+            </table>
         </div>
-        <div style='border-left: 1px solid #e2ded7; height: 35px;'></div>
-        <div>
-            <div style='font-size: 1.5rem; font-weight: 700; color: #047857;'>100%</div>
-            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Layout MXM Compatível</div>
+        """, unsafe_allow_html=True)
+
+        col_mep1, col_mep2, col_mep3 = st.columns([1.2, 1.2, 1.2])
+        with col_mep1:
+            mes_mep = st.text_input("Mês/Ano de Apuração", value="05/2026", key="txt_mes_mep")
+        with col_mep2:
+            data_mep = st.text_input("Data do Lançamento (DDMMYYYY)", value="31052026", key="txt_data_mep")
+        with col_mep3:
+            lote_mep = st.text_input("Lote Contábil MXM", value="MEP05", max_chars=6, key="txt_lote_mep")
+
+        st.markdown("#### 🏢 Investidas do Grupo Monte Carlo")
+
+        col_inv1, col_inv2 = st.columns(2)
+        with col_inv1:
+            st.markdown("""
+            <div style='background: #fdfcfb; border: 1px solid #e2ded7; border-radius: 10px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #ffc220;'>
+                <b style='font-size: 1.05rem; color: #0b0b0b;'>0001 - Monte Carlo Joias (Via Parque)</b><br>
+                <span style='font-size: 0.78rem; color: #64748b;'>Conta Ativo: <b>1220100001</b> | Conta DRE: <b>4110300001</b></span>
+            </div>
+            """, unsafe_allow_html=True)
+            lucro_0001 = st.number_input("Resultado / Lucro Líquido do Mês (R$) - 0001:", value=850000.00, step=10000.0, format="%.2f", key="inp_lucro_0001")
+            part_0001 = st.number_input("% de Participação Societária (0001):", value=99.99, step=0.01, format="%.2f", key="inp_part_0001")
+            mep_val_0001 = lucro_0001 * (part_0001 / 100.0)
+            st.markdown(f"**Resultado de MEP (0001):** `R$ {mep_val_0001:,.2f}`")
+
+        with col_inv2:
+            st.markdown("""
+            <div style='background: #fdfcfb; border: 1px solid #e2ded7; border-radius: 10px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #ffc220;'>
+                <b style='font-size: 1.05rem; color: #0b0b0b;'>0003 - MC Indústria de Joias (Fábrica)</b><br>
+                <span style='font-size: 0.78rem; color: #64748b;'>Conta Ativo: <b>1220100002</b> | Conta DRE: <b>4110300001</b></span>
+            </div>
+            """, unsafe_allow_html=True)
+            lucro_0003 = st.number_input("Resultado / Lucro Líquido do Mês (R$) - 0003:", value=320000.00, step=10000.0, format="%.2f", key="inp_lucro_0003")
+            part_0003 = st.number_input("% de Participação Societária (0003):", value=99.99, step=0.01, format="%.2f", key="inp_part_0003")
+            mep_val_0003 = lucro_0003 * (part_0003 / 100.0)
+            st.markdown(f"**Resultado de MEP (0003):** `R$ {mep_val_0003:,.2f}`")
+
+        total_mep_periodo = mep_val_0001 + mep_val_0003
+        badge_mep_tipo = "🟢 Receita de MEP no DRE (2DIR)" if total_mep_periodo >= 0 else "🔴 Despesa de MEP no DRE (2DIR)"
+        st.markdown(f"""
+        <div style='background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 16px; margin-top: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;'>
+            <div>
+                <span style='color: #065f46; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;'>Total de Equivalência Patrimonial Apurado (Holding 0002):</span><br>
+                <span style='color: #047857; font-size: 1.6rem; font-weight: 700;'>R$ {total_mep_periodo:,.2f}</span>
+            </div>
+            <div>
+                <span class='badge-active'>{badge_mep_tipo}</span>
+            </div>
         </div>
-        <div style='border-left: 1px solid #e2ded7; height: 35px;'></div>
-        <div>
-            <div style='font-size: 1.5rem; font-weight: 700; color: #0b0b0b;'>Alterdata</div>
-            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Origem dos Relatórios</div>
-        </div>
-        <div style='border-left: 1px solid #e2ded7; height: 35px;'></div>
-        <div>
-            <div style='font-size: 1.5rem; font-weight: 700; color: #0b0b0b;'>Cloud</div>
-            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Disponibilidade Segura</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+
+        # Build MXM Entry Rows
+        mep_entries = []
+        seq = 1
+
+        # Investida 0001
+        if abs(mep_val_0001) >= 0.01:
+            if mep_val_0001 > 0:
+                mep_entries.append({
+                    'empresa': '0002', 'lote': lote_mep, 'data': data_mep, 'documento': lote_mep,
+                    'conta': '1220100001', 'cc': None, 'tipo': 'D',
+                    'historico': f"VLR REF APURACAO DE EQUIVALENCIA PATRIMONIAL S/ MONTE CARLO JOIAS CONF BALANCETE {mes_mep}".upper()[:200],
+                    'valor': mep_val_0001, 'sequencia': seq, 'numero_titulo': ''
+                })
+                seq += 1
+                mep_entries.append({
+                    'empresa': '0002', 'lote': lote_mep, 'data': data_mep, 'documento': lote_mep,
+                    'conta': '4110300001', 'cc': '2DIR', 'tipo': 'C',
+                    'historico': f"VLR REF APURACAO DE EQUIVALENCIA PATRIMONIAL S/ MONTE CARLO JOIAS CONF BALANCETE {mes_mep}".upper()[:200],
+                    'valor': mep_val_0001, 'sequencia': seq, 'numero_titulo': ''
+                })
+                seq += 1
+            else:
+                mep_entries.append({
+                    'empresa': '0002', 'lote': lote_mep, 'data': data_mep, 'documento': lote_mep,
+                    'conta': '5110300001', 'cc': '2DIR', 'tipo': 'D',
+                    'historico': f"VLR REF PERDA POR EQUIVALENCIA PATRIMONIAL S/ MONTE CARLO JOIAS CONF BALANCETE {mes_mep}".upper()[:200],
+                    'valor': abs(mep_val_0001), 'sequencia': seq, 'numero_titulo': ''
+                })
+                seq += 1
+                mep_entries.append({
+                    'empresa': '0002', 'lote': lote_mep, 'data': data_mep, 'documento': lote_mep,
+                    'conta': '1220100001', 'cc': None, 'tipo': 'C',
+                    'historico': f"VLR REF PERDA POR EQUIVALENCIA PATRIMONIAL S/ MONTE CARLO JOIAS CONF BALANCETE {mes_mep}".upper()[:200],
+                    'valor': abs(mep_val_0001), 'sequencia': seq, 'numero_titulo': ''
+                })
+                seq += 1
+
+        # Investida 0003
+        if abs(mep_val_0003) >= 0.01:
+            if mep_val_0003 > 0:
+                mep_entries.append({
+                    'empresa': '0002', 'lote': lote_mep, 'data': data_mep, 'documento': lote_mep,
+                    'conta': '1220100002', 'cc': None, 'tipo': 'D',
+                    'historico': f"VLR REF APURACAO DE EQUIVALENCIA PATRIMONIAL S/ MC INDUSTRIA CONF BALANCETE {mes_mep}".upper()[:200],
+                    'valor': mep_val_0003, 'sequencia': seq, 'numero_titulo': ''
+                })
+                seq += 1
+                mep_entries.append({
+                    'empresa': '0002', 'lote': lote_mep, 'data': data_mep, 'documento': lote_mep,
+                    'conta': '4110300001', 'cc': '2DIR', 'tipo': 'C',
+                    'historico': f"VLR REF APURACAO DE EQUIVALENCIA PATRIMONIAL S/ MC INDUSTRIA CONF BALANCETE {mes_mep}".upper()[:200],
+                    'valor': mep_val_0003, 'sequencia': seq, 'numero_titulo': ''
+                })
+                seq += 1
+            else:
+                mep_entries.append({
+                    'empresa': '0002', 'lote': lote_mep, 'data': data_mep, 'documento': lote_mep,
+                    'conta': '5110300001', 'cc': '2DIR', 'tipo': 'D',
+                    'historico': f"VLR REF PERDA POR EQUIVALENCIA PATRIMONIAL S/ MC INDUSTRIA CONF BALANCETE {mes_mep}".upper()[:200],
+                    'valor': abs(mep_val_0003), 'sequencia': seq, 'numero_titulo': ''
+                })
+                seq += 1
+                mep_entries.append({
+                    'empresa': '0002', 'lote': lote_mep, 'data': data_mep, 'documento': lote_mep,
+                    'conta': '1220100002', 'cc': None, 'tipo': 'C',
+                    'historico': f"VLR REF PERDA POR EQUIVALENCIA PATRIMONIAL S/ MC INDUSTRIA CONF BALANCETE {mes_mep}".upper()[:200],
+                    'valor': abs(mep_val_0003), 'sequencia': seq, 'numero_titulo': ''
+                })
+                seq += 1
+
+        st.markdown("#### 📄 Lançamentos Contábeis Gerados para o MXM")
+        df_mep_show = pd.DataFrame(mep_entries)
+        if not df_mep_show.empty:
+            st.dataframe(
+                df_mep_show[["sequencia", "empresa", "lote", "data", "conta", "cc", "tipo", "valor", "historico"]].style.format({
+                    "valor": "R$ {:,.2f}"
+                }),
+                use_container_width=True,
+                hide_index=True
+            )
+
+            # Export to MXM template
+            col_b1, col_b2 = st.columns([1.5, 3])
+            with col_b1:
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as tmp_mep:
+                    tmp_mep_path = tmp_mep.name
+
+                try:
+                    write_to_excel_template(TEMPLATE_FILE, tmp_mep_path, mep_entries)
+                    with open(tmp_mep_path, "rb") as f_mep:
+                        mep_bytes = f_mep.read()
+                    os.unlink(tmp_mep_path)
+
+                    st.download_button(
+                        label="📥 Baixar Lote de MEP no Layout MXM (.xlsx)",
+                        data=mep_bytes,
+                        file_name=f"Lancamentos_MEP_Empresa_0002_{mes_mep.replace('/', '_')}.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        use_container_width=True
+                    )
+                except Exception as e:
+                    st.error(f"Erro ao gerar planilha MXM: {e}")
+
+    # -------------------------------------------------------------
+    # TAB 3: Checklist Mensal de Fechamento Contábil
+    # -------------------------------------------------------------
+    with tab_checklist:
+        st.markdown("### 📋 Checklist Mensal de Fechamento Contábil")
+        st.markdown("Acompanhamento colaborativo das etapas obrigatórias de encerramento mensal para as Empresas 0001, 0002 e 0003.")
+
+        if "fechamento_checklist" not in st.session_state:
+            st.session_state.fechamento_checklist = {
+                "folha_0001": True,
+                "folha_0002": True,
+                "folha_0003": True,
+                "encargos_inss": True,
+                "encargos_fgts": True,
+                "imobilizado_deprec": False,
+                "bancos_conciliados": False,
+                "fornecedores_conciliados": False,
+                "intercompany_mutuos": False,
+                "mep_holding": False,
+                "contas_viradas": False,
+                "balancete_validado": False
+            }
+
+        tasks = [
+            ("folha_0001", "1. Integração de Folha de Pagamento - Empresa 0001 (Via Parque / 1SVP)", "RH & Folha"),
+            ("folha_0002", "2. Integração de Folha / Pró-Labore - Empresa 0002 (Holding / 2DIR)", "RH & Folha"),
+            ("folha_0003", "3. Integração de Folha de Pagamento - Empresa 0003 (Fábrica / 3FAB)", "RH & Folha"),
+            ("encargos_inss", "4. Apuração e Conferência de INSS Patronal e Terceiros (GPS)", "Encargos"),
+            ("encargos_fgts", "5. Conferência e Conciliação das Guias de FGTS", "Encargos"),
+            ("imobilizado_deprec", "6. Cálculo e Contabilização das Quotas de Depreciação (Ativo)", "Patrimônio"),
+            ("bancos_conciliados", "7. Conciliação Bancária das Contas Movimento e Aplicações", "Financeiro"),
+            ("fornecedores_conciliados", "8. Confronto de Fornecedores e Contas a Pagar", "Contábil"),
+            ("intercompany_mutuos", "9. Batimento e Conciliação de Saldos Intercompany (0001 x 0002 x 0003)", "Societário"),
+            ("mep_holding", "10. Apuração e Lançamento de Equivalência Patrimonial (MEP) na Holding", "Societário"),
+            ("contas_viradas", "11. Auditoria e Reclassificação de Contas Viradas no Balancete", "Auditoria"),
+            ("balancete_validado", "12. Fechamento Final e Validação do Balancete Contábil Mensal", "Governança")
+        ]
+
+        completed_count = sum(1 for k, _, _ in tasks if st.session_state.fechamento_checklist.get(k, False))
+        pct_progress = int((completed_count / len(tasks)) * 100)
+
+        st.progress(pct_progress / 100.0)
+        st.markdown(f"**Progresso Geral do Fechamento:** `{completed_count} de {len(tasks)} etapas concluídas ({pct_progress}%)`")
+        st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
+        for task_key, task_desc, task_tag in tasks:
+            col_t1, col_t2 = st.columns([5, 1])
+            with col_t1:
+                chk = st.checkbox(
+                    task_desc,
+                    value=st.session_state.fechamento_checklist.get(task_key, False),
+                    key=f"chk_task_{task_key}"
+                )
+                st.session_state.fechamento_checklist[task_key] = chk
+            with col_t2:
+                st.markdown(f"<span class='tag-chip' style='margin-top: 5px;'>{task_tag}</span>", unsafe_allow_html=True)
 
 
 def render_module_placeholder(page_key):
     details = {
-        "fechamento": {
-            "title": "Fechamento Contábil & Auditoria",
-            "icon": "📋",
-            "desc": "Ambiente de governança, checklist mensal de encerramento e validações de integridade contábil.",
-            "items": [
-                "Checklist colaborativo de rotinas com prazos e responsáveis",
-                "Batimento e conciliação de saldos Intercompany entre empresas da rede",
-                "Pré-auditoria de balancete: detecção de contas invertidas e saldos inconsistentes",
-                "Emissão de relatórios gerenciais consolidados para a diretoria"
-            ]
-        },
         "ativo": {
             "title": "Ativo Imobilizado & Depreciação",
             "icon": "🏭",
@@ -716,6 +1192,20 @@ with st.sidebar:
 # Early exit router for Home and Placeholders
 if st.session_state.current_page == "home":
     render_home_page()
+    last_update_text = get_last_github_update()
+    st.markdown(f"""
+    <div class="footer">
+        <div style="font-weight: 600; color: #475569; font-size: 0.95rem; margin-bottom: 4px;">
+            Equipe Contábil Monte Carlo
+        </div>
+        <div style="font-size: 0.82rem; color: #64748b;">
+            Última atualização no GitHub: <b style="color: #0b0b0b;">{last_update_text}</b>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    st.stop()
+elif st.session_state.current_page == "fechamento":
+    render_fechamento_contabil()
     last_update_text = get_last_github_update()
     st.markdown(f"""
     <div class="footer">
