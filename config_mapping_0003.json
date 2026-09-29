@@ -1,302 +1,757 @@
 {
     "001": {
-        "debit_account": "3.1.01.01.0001",
+        "debit_account": "4120300001",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
+    },
+    "007": {
+        "description": "Dissídio (1/1): Saldo de Salario",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "009": {
+        "description": "Dissídio (1/1): Férias",
+        "debit_account": "4120300003",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "020": {
+        "description": "Periculosidade",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "032": {
+        "description": "Dev. de Desconto Indevido",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "036": {
+        "description": "DSR Sobre Adicional Noturno 20%",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "055": {
+        "description": "LOCAÇÃO/MANUTENÇÃO DE MOTOCICLETA",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "066": {
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
     },
     "067": {
-        "debit_account": "3.1.01.02.0001",
+        "debit_account": "4120300010",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
+    },
+    "068": {
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "069": {
+        "description": "Hora Extra 100%",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "071": {
+        "description": "Atestado Médico",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "084": {
+        "description": "RECESSO REMUNERADO",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "085": {
+        "description": "BOLSA ESTÁGIO",
+        "debit_account": "4120300001",
+        "credit_account": "2140100002",
+        "cost_center": "3FAB"
     },
     "086": {
-        "debit_account": "3.1.01.02.0002",
+        "description": "Reembolso de Refeição / Alimentação",
+        "debit_account": "4120300009",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
     },
-    "129": {
-        "debit_account": "3.1.01.02.0003",
+    "087": {
+        "description": "DIF. FÉRIAS",
+        "debit_account": "4120300001",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
     },
-    "400": {
-        "debit_account": "3.1.01.01.0011",
+    "093": {
+        "description": "Folgas",
+        "debit_account": "4120300001",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
     },
-    "412": {
-        "debit_account": "3.1.01.01.0011",
+    "109": {
+        "description": "Adicional Noturno",
+        "debit_account": "4120300001",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
     },
-    "414": {
-        "debit_account": "3.1.01.01.0005",
+    "100": {
+        "description": "BIÊNIO 3%",
+        "debit_account": "4120300001",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
     },
-    "420": {
-        "debit_account": "3.1.01.01.0005",
+    "104": {
+        "description": "Devolução Alimentação/Refeição",
+        "debit_account": "4120300009",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
     },
-    "447": {
-        "debit_account": "3.1.01.02.0003",
+    "110": {
+        "description": "Dev. Desconto Indevido RIOCARD",
+        "debit_account": "4120300009",
         "credit_account": "2140100001",
-        "cost_center": "1001"
+        "cost_center": "3FAB"
+    },
+    "113": {
+        "description": "DSR Sobre Adicional Noturno",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "117": {
+        "description": "Bonificação por Serviços Prestados",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "119": {
+        "description": "DEV. DE PLANO ODONTOLÓGICO",
+        "debit_account": "4120300012",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "128": {
+        "description": "Reembolso VR mês anterior",
+        "debit_account": "4120300009",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "130": {
+        "description": "Reembolso VT Mês Anterior",
+        "debit_account": "4120300010",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "141": {
+        "description": "Despesas com Medicamentos",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "153": {
+        "description": "Complemento do evento Hora Extra",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "154": {
+        "description": "Complemento do evento Hora Extra",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "155": {
+        "description": "Complemento do evento DSR S/Hora Extr",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "170": {
+        "description": "Auxilio Educação",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "171": {
+        "description": "Auxilio Creche 10/12",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "200": {
+        "description": "Salário Maternidade",
+        "debit_account": "2140100001",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
+    },
+    "230": {
+        "description": "Prorrogação da Licença Maternidade",
+        "debit_account": "2140100001",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
+    },
+    "240": {
+        "description": "Diferença de INSS",
+        "debit_account": "2140100001",
+        "credit_account": "4120300006",
+        "cost_center": "3FAB"
+    },
+    "445": {
+        "description": "Estorno de Provisão (Crédito Trabalhador)",
+        "debit_account": "4120300005",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "501": {
+        "description": "Dissídio (1/1): Décimo Terceiro",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "504": {
+        "description": "Dissídio (1/1): Férias Vencidas",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "505": {
+        "description": "Dissídio (1/1): Férias Proporcionais",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "509": {
+        "description": "Dissídio (1/1): 1/3 de Férias Rescisão",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "597": {
+        "description": "Dissídio (1/1): 1/3 Férias",
+        "debit_account": "4120300003",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "599": {
+        "description": "Salário Família",
+        "debit_account": "2140100005",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "713": {
+        "description": "Abono Clausula 7 CCT",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "998": {
+        "description": "INSUFICIÊNCIA DE SALDO",
+        "debit_account": "4120300001",
+        "credit_account": "2140100001",
+        "cost_center": "3FAB"
+    },
+    "495": {
+        "description": "Faltas no Período (Saldo de Salário)",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "603": {
+        "description": "Pensão Aliment.",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
     },
     "604": {
         "debit_account": "2140100001",
-        "credit_account": "3.1.01.02.0001",
-        "cost_center": "1001"
+        "credit_account": "4120300010",
+        "cost_center": "3FAB"
     },
     "605": {
         "debit_account": "2140100001",
-        "credit_account": "2.1.02.02.0005",
-        "cost_center": "1001"
+        "credit_account": "4120300008",
+        "cost_center": "3FAB"
+    },
+    "606": {
+        "description": "Adiantamento 5/5",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
     },
     "609": {
+        "description": "Insuficiência de Saldo (des)",
         "debit_account": "2140100001",
-        "credit_account": "1.1.05.01.0001",
-        "cost_center": "1001"
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "614": {
+        "description": "Aviso Prévio Descontado",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
     },
     "615": {
         "debit_account": "2140100001",
-        "credit_account": "2.1.02.02.0005",
-        "cost_center": "1001"
+        "credit_account": "4120300012",
+        "cost_center": "3FAB"
+    },
+    "616": {
+        "description": "Dev. Vale Transporte (TRCT)",
+        "debit_account": "2140100001",
+        "credit_account": "4120300010",
+        "cost_center": "3FAB"
+    },
+    "619": {
+        "description": "ADIANTAMENTO DE FÉRIAS (DESCONTO)",
+        "debit_account": "2140100001",
+        "credit_account": "1140100004",
+        "cost_center": "3FAB"
     },
     "621": {
         "debit_account": "2140100001",
-        "credit_account": "3.1.01.02.0002",
-        "cost_center": "1001"
+        "credit_account": "4120300009",
+        "cost_center": "3FAB"
+    },
+    "622": {
+        "description": "Dev. Vale Alimentação / Refeição",
+        "debit_account": "2140100001",
+        "credit_account": "4120300009",
+        "cost_center": "3FAB"
     },
     "625": {
+        "description": "Assistência Medica",
         "debit_account": "2140100001",
-        "credit_account": "2.1.02.02.0005",
-        "cost_center": "1001"
+        "credit_account": "4120300008",
+        "cost_center": "3FAB"
+    },
+    "626": {
+        "description": "Desc. Pgto Indevido 1/5",
+        "debit_account": "2140100001",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
     },
     "635": {
         "debit_account": "2140100001",
-        "credit_account": "2.1.02.02.0005",
-        "cost_center": "1001"
+        "credit_account": "4120300012",
+        "cost_center": "3FAB"
+    },
+    "637": {
+        "description": "Desconto 2º Via Riocard",
+        "debit_account": "2140100001",
+        "credit_account": "4120300010",
+        "cost_center": "3FAB"
+    },
+    "643": {
+        "description": "PENSÃO ALIMENTICIA JUDICIAL 20%",
+        "debit_account": "2140100001",
+        "credit_account": "2140100013",
+        "cost_center": "3FAB"
+    },
+    "646": {
+        "description": "2º Via de VR / VA",
+        "debit_account": "2140100001",
+        "credit_account": "4120300009",
+        "cost_center": "3FAB"
+    },
+    "650": {
+        "description": "Alteração de Ticket",
+        "debit_account": "2140100001",
+        "credit_account": "4120300009",
+        "cost_center": "3FAB"
+    },
+    "682": {
+        "description": "PENSÃO ALIMENTÍCIA JUDICIAL 25%",
+        "debit_account": "2140100001",
+        "credit_account": "2140100013",
+        "cost_center": "3FAB"
+    },
+    "686": {
+        "description": "Vale Transporte Mês Anterior",
+        "debit_account": "2140100001",
+        "credit_account": "4120300009",
+        "cost_center": "3FAB"
+    },
+    "689": {
+        "description": "Desc. Plano Odontológico Mês Anterior",
+        "debit_account": "2140100001",
+        "credit_account": "4120300012",
+        "cost_center": "3FAB"
+    },
+    "690": {
+        "description": "Desc. de Plano de Saúde Mês Anterior",
+        "debit_account": "2140100001",
+        "credit_account": "4120300008",
+        "cost_center": "3FAB"
     },
     "692": {
+        "description": "Coparticipação Plano de Saúde - Part.",
         "debit_account": "2140100001",
-        "credit_account": "2.1.02.02.0005",
-        "cost_center": "1001"
+        "credit_account": "4120300008",
+        "cost_center": "3FAB"
+    },
+    "703": {
+        "description": "Desc. salario maternidade pg a maio",
+        "debit_account": "2140100001",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
     },
     "704": {
         "debit_account": "2140100001",
-        "credit_account": "1.1.05.02.0001",
-        "cost_center": "1001"
+        "credit_account": "1140800007",
+        "cost_center": "3FAB"
     },
     "705": {
+        "description": "Adiantamento de VR",
         "debit_account": "2140100001",
-        "credit_account": "1.1.05.02.0002",
-        "cost_center": "1001"
+        "credit_account": "1140100008",
+        "cost_center": "3FAB"
     },
     "709": {
         "debit_account": "2140100001",
-        "credit_account": "1.1.05.03.0002",
-        "cost_center": "1001"
+        "credit_account": "2140100002",
+        "cost_center": "3FAB"
+    },
+    "717": {
+        "debit_account": "2140100001",
+        "credit_account": "2140100013",
+        "cost_center": "3FAB"
+    },
+    "899": {
+        "description": "INSS 13o. Salário",
+        "debit_account": "2140100001",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
+    },
+    "900": {
+        "description": "INSS Rescisão",
+        "debit_account": "2140100001",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
     },
     "903": {
         "debit_account": "2140100001",
-        "credit_account": "2.1.02.02.0002",
-        "cost_center": "1001"
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
+    },
+    "909": {
+        "description": "IRRF 13o. Salário",
+        "debit_account": "2140100001",
+        "credit_account": "2140100007",
+        "cost_center": "3FAB"
     },
     "914": {
+        "description": "IRRF Folha",
         "debit_account": "2140100001",
-        "credit_account": "2.1.02.02.0003",
-        "cost_center": "1001"
+        "credit_account": "2140100007",
+        "cost_center": "3FAB"
     },
-    "998": {
-        "debit_account": "1.1.05.01.0001",
-        "credit_account": "2140100001",
-        "cost_center": "1001"
+    "925": {
+        "description": "DISSÍDIO: INSS DIFERENÇAS SALARIAIS",
+        "debit_account": "2140100001",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
     },
-    "GPS_PATRONAL": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "GPS_RAT": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "GPS_TERCEIROS": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "FGTS": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "926": {
+        "description": "DISSÍDIO: INSS 13° DIFERENÇAS SALARIAIS",
+        "debit_account": "2140100001",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
     },
     "002": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+        "description": "REMUNERAÇÃO AUTONOMO",
+        "debit_account": "2140100010",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
     },
     "013": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+        "description": "INSS",
+        "debit_account": "2140100010",
+        "credit_account": "2140100008",
+        "cost_center": "3FAB"
     },
     "014": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+        "description": "IRRF",
+        "debit_account": "4120300005",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
     },
-    "015": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "057": {
+        "description": "Reembolso de Plano de Saúde",
+        "debit_account": "4120300008",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "020": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "094": {
+        "description": "Hora Extra 60%",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "025": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "055": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "066": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "068": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "069": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "071": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "082": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "100": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "109": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "113": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
-    },
-    "117": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "102": {
+        "description": "Indenização Art. 477 CLT",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
     "126": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+        "description": "Diferença de Salário (Mês ant.)",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "128": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "157": {
+        "description": "Reembolso de Plano Odontológico",
+        "debit_account": "4120300012",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "147": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "162": {
+        "description": "13° Devido (Rescisão)",
+        "debit_account": "2140200004",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "200": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "167": {
+        "description": "Devolução de Equipamentos",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "230": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "400": {
+        "description": "Comissão",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "445": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "420": {
+        "description": "Repouso Remunerado",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "446": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "447": {
+        "description": "Ajuda de Custo (vend)",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
     "449": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+        "description": "Garantia Mínima - Comissão",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "495": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "490": {
+        "description": "Férias Proporcionais do Aviso Inden",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "599": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "491": {
+        "description": "Aviso Prévio sobre anos trabalhado",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "602": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "492": {
+        "description": "Aviso excedente aos 30 dias trabalhados",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "603": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "500": {
+        "description": "Aviso Prévio Indenizado",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "626": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "502": {
+        "description": "Décimo Terceiro Aviso",
+        "debit_account": "2140200004",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "643": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "503": {
+        "description": "Salario Familia Indenizado",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "702": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "508": {
+        "description": "Restante de Contrato (Art. 479 CLT)",
+        "debit_account": "4120300001",
+        "credit_account": "2140100012",
+        "cost_center": "3FAB"
     },
-    "708": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "397": {
+        "description": "Atrasos",
+        "debit_account": "2140100012",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
     },
-    "716": {
-        "debit_account": "",
-        "credit_account": "",
-        "cost_center": ""
+    "398": {
+        "description": "Faltas em Dias",
+        "debit_account": "2140100012",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "406": {
+        "description": "Adiantamento Salarial",
+        "debit_account": "2140100012",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "607": {
+        "description": "Vale",
+        "debit_account": "2140100012",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "608": {
+        "description": "1a. Parcela de Décimo Terceiro",
+        "debit_account": "2140100012",
+        "credit_account": "1140100002",
+        "cost_center": "3FAB"
+    },
+    "612": {
+        "description": "Restante de Contrato (Art. 480 CLT)",
+        "debit_account": "2140100012",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "630": {
+        "description": "Debito de Horas",
+        "debit_account": "2140100012",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "664": {
+        "description": "Dev. Vale Transporte",
+        "debit_account": "2140100012",
+        "credit_account": "4120300010",
+        "cost_center": "3FAB"
+    },
+    "665": {
+        "description": "Assistencia Médica Próximo mês",
+        "debit_account": "2140100012",
+        "credit_account": "4120300008",
+        "cost_center": "3FAB"
+    },
+    "667": {
+        "description": "Assistencia Odontológica Próximo",
+        "debit_account": "2140100012",
+        "credit_account": "4120300012",
+        "cost_center": "3FAB"
+    },
+    "691": {
+        "description": "Plano de Saúde Mês Seguinte",
+        "debit_account": "2140100012",
+        "credit_account": "4120300008",
+        "cost_center": "3FAB"
+    },
+    "700": {
+        "description": "2ª Parcela 13º Antecipada",
+        "debit_account": "2140100012",
+        "credit_account": "1140100002",
+        "cost_center": "3FAB"
+    },
+    "751": {
+        "description": "Desconto de Equipamentos",
+        "debit_account": "2140100012",
+        "credit_account": "4120300001",
+        "cost_center": "3FAB"
+    },
+    "901": {
+        "description": "INSS 13o. Rescisão",
+        "debit_account": "2140100012",
+        "credit_account": "4120300005",
+        "cost_center": "3FAB"
+    },
+    "910": {
+        "description": "IRRF Rescisão",
+        "debit_account": "2140100012",
+        "credit_account": "2140100007",
+        "cost_center": "3FAB"
+    },
+    "911": {
+        "description": "IRRF 13o. Rescisão",
+        "debit_account": "2140100012",
+        "credit_account": "2140100007",
+        "cost_center": "3FAB"
+    },
+    "Sócios :": {
+        "description": "0",
+        "debit_account": "4120300005",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
+    },
+    "003": {
+        "description": "1a. Parcela Décimo Terceiro Salário",
+        "debit_account": "2140200004",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "714": {
+        "description": "Provisão (Crédito Trabalhador)",
+        "debit_account": "2140100011",
+        "credit_account": "4120300005",
+        "cost_center": "3FAB"
+    },
+    "902": {
+        "description": "INSS Férias",
+        "debit_account": "2140100011",
+        "credit_account": "2140200002",
+        "cost_center": "3FAB"
+    },
+    "913": {
+        "description": "IRRF Férias",
+        "debit_account": "2140100011",
+        "credit_account": "2140100007",
+        "cost_center": "3FAB"
+    },
+    "Empresa Funcionários:": {
+        "description": "0",
+        "debit_account": "2140100011",
+        "credit_account": "2140100002",
+        "cost_center": "3FAB"
+    },
+    "718": {
+        "debit_account": "2140100001",
+        "credit_account": "2140100013",
+        "cost_center": "3FAB"
+    },
+    "719": {
+        "debit_account": "2140100001",
+        "credit_account": "2140100013",
+        "cost_center": "3FAB"
+    },
+    "GPS_PATRONAL": {
+        "debit_account": "4120300005",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
+    },
+    "GPS_RAT": {
+        "debit_account": "4120300005",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
+    },
+    "GPS_TERCEIROS": {
+        "debit_account": "4120300005",
+        "credit_account": "2140100005",
+        "cost_center": "3FAB"
+    },
+    "FGTS": {
+        "debit_account": "4120300006",
+        "credit_account": "2140100002",
+        "cost_center": "3FAB"
     }
 }

@@ -1,12 +1,48 @@
 import streamlit as st
 import pandas as pd
 import os
+import re
 import shutil
 import tempfile
-from datetime import datetime
+import urllib.request
+import json
+from datetime import datetime, timezone, timedelta
 
 from pdf_parser import parse_payroll_pdf
 from accounting_engine import load_mapping, save_mapping, generate_entries, write_to_excel_template
+
+@st.cache_data(ttl=120)
+def get_last_github_update():
+    """Fetches the latest commit timestamp from GitHub, with local fallback."""
+    # 1. GitHub API
+    try:
+        repo = 'limamelo12/integrador-folha-mxm'
+        url = f'https://api.github.com/repos/{repo}/commits?per_page=1'
+        req = urllib.request.Request(url, headers={'User-Agent': 'Streamlit-App'})
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            commit_date_str = data[0]['commit']['committer']['date']
+            dt = datetime.fromisoformat(commit_date_str.replace('Z', '+00:00'))
+            try:
+                import zoneinfo
+                dt_sp = dt.astimezone(zoneinfo.ZoneInfo('America/Sao_Paulo'))
+            except Exception:
+                dt_sp = dt.astimezone(timezone(timedelta(hours=-3)))
+            return dt_sp.strftime('%d/%m/%Y às %H:%M')
+    except Exception:
+        pass
+
+    # 2. Local fallback
+    try:
+        target_files = ['app.py', 'accounting_engine.py', 'pdf_parser.py']
+        mtimes = [os.path.getmtime(os.path.join(os.path.dirname(os.path.abspath(__file__)), f)) for f in target_files if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), f))]
+        if mtimes:
+            dt = datetime.fromtimestamp(max(mtimes))
+            return dt.strftime('%d/%m/%Y às %H:%M')
+    except Exception:
+        pass
+
+    return datetime.now().strftime('%d/%m/%Y')
 
 # Page Configuration
 st.set_page_config(
@@ -265,11 +301,462 @@ st.markdown("""
         font-size: 0.85rem;
         border-top: 1px solid #eae8e4 !important;
     }
+
+    /* Hub Module Cards & Styling */
+    .module-card {
+        background-color: #ffffff !important;
+        border: 1px solid #e2ded7 !important;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease-in-out;
+    }
+    .module-card:hover {
+        border-color: #0b0b0b !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        transform: translateY(-2px);
+    }
+    .badge-active {
+        background-color: #ecfdf5;
+        color: #047857;
+        font-weight: 700;
+        font-size: 0.72rem;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        border: 1px solid #a7f3d0;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+    .badge-soon {
+        background-color: #f8fafc;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.72rem;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        border: 1px solid #e2e8f0;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+    .tag-chip {
+        background-color: #f5f4f0;
+        color: #475569;
+        font-size: 0.75rem;
+        padding: 3px 9px;
+        border-radius: 6px;
+        display: inline-block;
+        margin-right: 6px;
+        margin-bottom: 6px;
+        font-weight: 500;
+        border: 1px solid #e8e6e1;
+    }
 </style>
+
 """, unsafe_allow_html=True)
 
 # Helper to find template file
 TEMPLATE_FILE = os.path.join(BASE_DIR, "Lançamentos Contábeis MXM.xlsx")
+
+
+
+
+# -------------------------------------------------------------
+# Module Views & Navigation
+# -------------------------------------------------------------
+
+def render_home_page():
+    # Top Header Bar
+    st.markdown("""
+    <div style='display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eae8e4; padding-bottom: 12px; margin-bottom: 25px; font-size: 0.88rem; color: #64748b;'>
+        <div>
+            <span style='font-weight: 700; color: #0b0b0b; letter-spacing: 0.05em;'>MONTE CARLO</span> 
+            &nbsp;|&nbsp; Portal de Automações Contábeis
+        </div>
+        <div style='display: flex; gap: 15px; align-items: center;'>
+            <span>🏢 Empresas Ativas: <b>0001, 0002, 0003</b></span>
+            <span style='background: #ecfdf5; color: #047857; font-weight: 600; padding: 2px 10px; border-radius: 9999px; font-size: 0.75rem; border: 1px solid #a7f3d0;'>🟢 ERP MXM Online</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Hero Section matching official portal aesthetic
+    col_h1, col_h2, col_h3 = st.columns([1, 2.2, 1])
+    with col_h2:
+        if os.path.exists("Logo.png"):
+            st.image("Logo.png", use_container_width=True)
+        st.markdown("""
+        <div style='text-align: center; margin-top: -10px; margin-bottom: 30px;'>
+            <h2 style='font-size: 1.85rem; font-weight: 700; color: #0b0b0b; margin-bottom: 6px;'>
+                Portal Contábil Monte Carlo
+            </h2>
+            <p style='color: #64748b; font-size: 1.0rem;'>
+                Central unificada de rotinas contábeis, conciliações e integrações com o ERP MXM.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("### 📌 Rotinas & Módulos Disponíveis")
+    st.markdown("<p style='color: #64748b; margin-top: -10px; margin-bottom: 20px;'>Selecione uma das automações contábeis abaixo para iniciar:</p>", unsafe_allow_html=True)
+    
+    # Cards Grid (2 columns layout)
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Card 1: Integrador de Folha (MXM) - Active
+        st.markdown("""
+        <div class="custom-card" style='border-left: 4px solid #047857; min-height: 290px;'>
+            <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
+                <div style='font-size: 1.6rem;'>📊</div>
+                <span class='badge-active'>🟢 Operacional</span>
+            </div>
+            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Integrador de Folha de Pagamento</h4>
+            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
+                Importação de relatórios Alterdata e geração automática do layout contábil MXM com cruzamento De-Para e conciliação de encargos.
+            </p>
+            <div style='margin-bottom: 18px;'>
+                <span class='tag-chip'>Folha Normal</span>
+                <span class='tag-chip'>Rescisão</span>
+                <span class='tag-chip'>Férias</span>
+                <span class='tag-chip'>Pró-Labore</span>
+                <span class='tag-chip'>Empresas 0001, 0002, 0003</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Acessar Integrador de Folha ➔", key="btn_hub_folha", type="primary", use_container_width=True):
+            st.session_state.current_page = "folha"
+            st.rerun()
+
+        st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+
+        # Card 3: Conciliação Bancária & Cartões
+        st.markdown("""
+        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 290px;'>
+            <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
+                <div style='font-size: 1.6rem;'>🏦</div>
+                <span class='badge-soon'>🟡 Em Desenvolvimento</span>
+            </div>
+            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Conciliação Bancária & Cartões</h4>
+            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
+                Confronto e conciliação de arquivos OFX bancários e relatórios de adquirentes (Cielo, Rede, Stone) contra o razão contábil do MXM.
+            </p>
+            <div style='margin-bottom: 18px;'>
+                <span class='tag-chip'>Extratos OFX</span>
+                <span class='tag-chip'>Adquirentes Loja</span>
+                <span class='tag-chip'>Tarifas Bancárias</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_bancario", use_container_width=True):
+            st.session_state.current_page = "bancario"
+            st.rerun()
+
+        st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+
+        # Card 5: Ativo Imobilizado & Depreciação
+        st.markdown("""
+        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 290px;'>
+            <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
+                <div style='font-size: 1.6rem;'>🏭</div>
+                <span class='badge-soon'>🟡 Em Desenvolvimento</span>
+            </div>
+            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Ativo Imobilizado & Depreciação</h4>
+            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
+                Controle patrimonial de máquinas da fábrica (3FAB) e benfeitorias em lojas de shopping, com cálculo e geração automática de quotas mensais.
+            </p>
+            <div style='margin-bottom: 18px;'>
+                <span class='tag-chip'>Bens Fabris</span>
+                <span class='tag-chip'>Obras e Lojas</span>
+                <span class='tag-chip'>Quotas Depreciação</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_ativo", use_container_width=True):
+            st.session_state.current_page = "ativo"
+            st.rerun()
+
+    with col2:
+        # Card 2: Fiscal & Tributário
+        st.markdown("""
+        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 290px;'>
+            <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
+                <div style='font-size: 1.6rem;'>⚖️</div>
+                <span class='badge-soon'>🟡 Em Desenvolvimento</span>
+            </div>
+            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Módulo Fiscal & Tributário</h4>
+            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
+                Conciliação de retenções na fonte (IRRF, PIS/COFINS/CSLL, ISS), apuração de tributos diretos e indiretos e geração de provisões fiscais.
+            </p>
+            <div style='margin-bottom: 18px;'>
+                <span class='tag-chip'>Retenções Fonte</span>
+                <span class='tag-chip'>DIFAL / ICMS</span>
+                <span class='tag-chip'>Provisões de Impostos</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_fiscal", use_container_width=True):
+            st.session_state.current_page = "fiscal"
+            st.rerun()
+
+        st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+
+        # Card 4: Fechamento Contábil & Auditoria
+        st.markdown("""
+        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 290px;'>
+            <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
+                <div style='font-size: 1.6rem;'>📋</div>
+                <span class='badge-soon'>🟡 Em Desenvolvimento</span>
+            </div>
+            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Fechamento Contábil & Auditoria</h4>
+            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
+                Checklist inteligente de encerramento mensal, batimento de saldos patrimoniais, conciliação Intercompany e pré-validação de balancete.
+            </p>
+            <div style='margin-bottom: 18px;'>
+                <span class='tag-chip'>Checklist Fechamento</span>
+                <span class='tag-chip'>Intercompany</span>
+                <span class='tag-chip'>Auditoria de Contas</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_fechamento", use_container_width=True):
+            st.session_state.current_page = "fechamento"
+            st.rerun()
+
+    # Bottom Information Panel
+    st.markdown("---")
+    st.markdown("""
+    <div style='background: #ffffff; border: 1px solid #e2ded7; border-radius: 12px; padding: 20px; display: flex; justify-content: space-around; align-items: center; text-align: center;'>
+        <div>
+            <div style='font-size: 1.5rem; font-weight: 700; color: #0b0b0b;'>3</div>
+            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Empresas Parametrizadas</div>
+        </div>
+        <div style='border-left: 1px solid #e2ded7; height: 35px;'></div>
+        <div>
+            <div style='font-size: 1.5rem; font-weight: 700; color: #047857;'>100%</div>
+            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Layout MXM Compatível</div>
+        </div>
+        <div style='border-left: 1px solid #e2ded7; height: 35px;'></div>
+        <div>
+            <div style='font-size: 1.5rem; font-weight: 700; color: #0b0b0b;'>Alterdata</div>
+            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Origem dos Relatórios</div>
+        </div>
+        <div style='border-left: 1px solid #e2ded7; height: 35px;'></div>
+        <div>
+            <div style='font-size: 1.5rem; font-weight: 700; color: #0b0b0b;'>Cloud</div>
+            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Disponibilidade Segura</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_module_placeholder(page_key):
+    details = {
+        "fiscal": {
+            "title": "Módulo Fiscal & Apuração de Tributos",
+            "icon": "⚖️",
+            "desc": "Automação do fechamento fiscal, conferência de retenções na fonte e provisões contábeis de tributos diretos e indiretos.",
+            "items": [
+                "Importação de relatórios de retenções (IRRF, PIS, COFINS, CSLL, ISS) com conciliação contra fornecedores",
+                "Geração automática de lançamentos contábeis de provisão de impostos no layout MXM",
+                "Confronto entre notas fiscais tomadas/prestadas e o razão de impostos a recolher",
+                "Suporte a regras tributárias de lojas de shopping e fábrica"
+            ]
+        },
+        "bancario": {
+            "title": "Conciliação Bancária & Cartões",
+            "icon": "🏦",
+            "desc": "Confronto eletrônico de extratos bancários e arquivos de adquirentes com as contas patrimoniais do ERP MXM.",
+            "items": [
+                "Leitura de arquivos OFX de todos os bancos conveniados da Monte Carlo",
+                "Importação de relatórios de adquirentes (Cielo, Rede, Stone) com conciliação de taxas e recebimentos",
+                "Identificação de pendências bancárias não lançadas na contabilidade",
+                "Geração de lançamentos de tarifas e juros bancários no MXM"
+            ]
+        },
+        "fechamento": {
+            "title": "Fechamento Contábil & Auditoria",
+            "icon": "📋",
+            "desc": "Ambiente de governança, checklist mensal de encerramento e validações de integridade contábil.",
+            "items": [
+                "Checklist colaborativo de rotinas com prazos e responsáveis",
+                "Batimento e conciliação de saldos Intercompany entre empresas da rede",
+                "Pré-auditoria de balancete: detecção de contas invertidas e saldos inconsistentes",
+                "Emissão de relatórios gerenciais consolidados para a diretoria"
+            ]
+        },
+        "ativo": {
+            "title": "Ativo Imobilizado & Depreciação",
+            "icon": "🏭",
+            "desc": "Gestão patrimonial do parque fabril e investimentos em instalações das lojas da rede Monte Carlo.",
+            "items": [
+                "Controle de aquisições e baixas de bens do ativo imobilizado",
+                "Cálculo automatizado das quotas mensais de depreciação por centro de custo (3FAB, 1SVP, Lojas)",
+                "Exportação do lote contábil de depreciação direto para o MXM",
+                "Relatório auxiliar de conciliação do razão do Imobilizado"
+            ]
+        }
+    }
+    mod = details.get(page_key, {
+        "title": "Módulo em Planejamento",
+        "icon": "⚙️",
+        "desc": "Rotina contábil em fase de concepção.",
+        "items": []
+    })
+    
+    # Top bar
+    col_top_back, col_top_title = st.columns([1.5, 4])
+    with col_top_back:
+        if st.button("⬅ Hub de Rotinas", key=f"btn_back_home_{page_key}"):
+            st.session_state.current_page = "home"
+            st.rerun()
+    with col_top_title:
+        st.markdown(f"<div style='font-size: 0.88rem; color: #64748b; padding-top: 6px;'><b>Portal Contábil Monte Carlo</b> &nbsp;/&nbsp; <span>{mod['title']}</span></div>", unsafe_allow_html=True)
+    
+    st.markdown(f"## {mod['icon']} {mod['title']}")
+    st.markdown(f"<p style='color: #475569; font-size: 1.05rem;'>{mod['desc']}</p>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style='background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 18px; margin-bottom: 25px;'>
+        <b style='color: #b45309;'>🟡 Módulo em Planejamento / Desenvolvimento</b><br>
+        <span style='color: #78350f; font-size: 0.9rem;'>
+            Esta rotina faz parte do roadmap de expansão do Portal Contábil Monte Carlo. 
+            Em breve estará disponível com parametrização completa e integração direta ao ERP MXM.
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("### 📋 Escopo e Funcionalidades Planejadas:")
+    for item in mod['items']:
+        st.markdown(f"- ⏳ {item}")
+        
+    st.markdown("<br>", unsafe_allow_html=True)
+    col_btn1, col_btn2 = st.columns([1.5, 3])
+    with col_btn1:
+        if st.button("Acessar Integrador de Folha (Módulo Ativo) ➔", key=f"btn_go_folha_from_{page_key}", type="primary"):
+            st.session_state.current_page = "folha"
+            st.rerun()
+    with col_btn2:
+        if st.button("Voltar à Página Inicial (Hub)", key=f"btn_go_home_from_{page_key}"):
+            st.session_state.current_page = "home"
+            st.rerun()
+
+
+# -------------------------------------------------------------
+# Global Navigation & Main Router
+# -------------------------------------------------------------
+
+# Initialize current_page state
+if 'current_page' not in st.session_state:
+    st.session_state.current_page = 'home'
+
+# Global Sidebar Header & Navigation
+with st.sidebar:
+    if os.path.exists("Logo.png"):
+        st.image("Logo.png", use_container_width=True)
+    else:
+        st.image("https://img.icons8.com/fluency/96/000000/accounting.png", width=80)
+        
+    st.markdown("<div style='text-align: center; font-weight: 700; color: #0b0b0b; margin-top: 5px; margin-bottom: 15px; font-size: 0.95rem; letter-spacing: 0.05em;'>PORTAL CONTÁBIL</div>", unsafe_allow_html=True)
+    
+    nav_options = [
+        ("home", "🏠 Início (Hub de Rotinas)"),
+        ("folha", "📊 Folha de Pagamento (MXM)"),
+        ("fiscal", "⚖️ Fiscal & Tributário"),
+        ("bancario", "🏦 Conciliação Bancária"),
+        ("fechamento", "📋 Fechamento Contábil"),
+        ("ativo", "🏭 Ativo Imobilizado")
+    ]
+    nav_keys = [k for k, _ in nav_options]
+    nav_labels = {k: label for k, label in nav_options}
+    
+    current_page = st.session_state.get('current_page', 'home')
+    if current_page not in nav_keys:
+        current_page = 'home'
+    default_nav_idx = nav_keys.index(current_page)
+    
+    st.markdown("<p style='font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;'>Menu de Navegação</p>", unsafe_allow_html=True)
+    sel_page = st.radio(
+        "Menu de Módulos",
+        options=nav_keys,
+        format_func=lambda x: nav_labels[x],
+        index=default_nav_idx,
+        key=f"sidebar_nav_{current_page}",
+        label_visibility="collapsed"
+    )
+    if sel_page != current_page:
+        st.session_state.current_page = sel_page
+        st.rerun()
+
+    st.markdown("---")
+    
+    if st.session_state.current_page == "home":
+        st.markdown("**Sobre o Portal:**\n"
+                    "Ambiente unificado de automações da **Equipe Contábil Monte Carlo**, integrando relatórios do Alterdata diretamente ao layout do ERP MXM.")
+        st.markdown("<br><p style='font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 4px;'>Empresas Habilitadas:</p>"
+                    "<span style='font-size: 0.85rem; color: #1e293b;'>• <b>0001</b> - Via Parque (1SVP)<br>• <b>0002</b> - Holding (2DIR)<br>• <b>0003</b> - Fábrica (3FAB)</span>", unsafe_allow_html=True)
+        st.markdown("---")
+        last_update_text = get_last_github_update()
+        st.markdown(f"""
+        <div style='text-align: center; color: #64748b; font-size: 0.78rem; margin-top: 15px;'>
+            <b style='color: #475569;'>Equipe Contábil Monte Carlo</b><br>
+            <span style='color: #64748b;'>Última atualização (GitHub):<br><b style='color: #0b0b0b;'>{last_update_text}</b></span>
+        </div>
+        """, unsafe_allow_html=True)
+    elif st.session_state.current_page != "folha":
+        st.markdown("**Status do Módulo:**\n"
+                    "Rotina contábil em planejamento e desenvolvimento para a Equipe Monte Carlo.")
+        st.markdown("---")
+        last_update_text = get_last_github_update()
+        st.markdown(f"""
+        <div style='text-align: center; color: #64748b; font-size: 0.78rem; margin-top: 15px;'>
+            <b style='color: #475569;'>Equipe Contábil Monte Carlo</b><br>
+            <span style='color: #64748b;'>Última atualização (GitHub):<br><b style='color: #0b0b0b;'>{last_update_text}</b></span>
+        </div>
+        """, unsafe_allow_html=True)
+
+# Early exit router for Home and Placeholders
+if st.session_state.current_page == "home":
+    render_home_page()
+    last_update_text = get_last_github_update()
+    st.markdown(f"""
+    <div class="footer">
+        <div style="font-weight: 600; color: #475569; font-size: 0.95rem; margin-bottom: 4px;">
+            Equipe Contábil Monte Carlo
+        </div>
+        <div style="font-size: 0.82rem; color: #64748b;">
+            Última atualização no GitHub: <b style="color: #0b0b0b;">{last_update_text}</b>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    st.stop()
+elif st.session_state.current_page != "folha":
+    render_module_placeholder(st.session_state.current_page)
+    last_update_text = get_last_github_update()
+    st.markdown(f"""
+    <div class="footer">
+        <div style="font-weight: 600; color: #475569; font-size: 0.95rem; margin-bottom: 4px;">
+            Equipe Contábil Monte Carlo
+        </div>
+        <div style="font-size: 0.82rem; color: #64748b;">
+            Última atualização no GitHub: <b style="color: #0b0b0b;">{last_update_text}</b>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    st.stop()
+
+# --- CONTINUES INTO FOLHA DE PAGAMENTO ---
+
+
+# Breadcrumb & Module Header
+col_top_back, col_top_title = st.columns([1.5, 4])
+with col_top_back:
+    if st.button("⬅ Hub de Rotinas", key="btn_back_home_folha"):
+        st.session_state.current_page = "home"
+        st.rerun()
+with col_top_title:
+    st.markdown("<div style='font-size: 0.88rem; color: #64748b; padding-top: 6px;'><b>Portal Contábil Monte Carlo</b> &nbsp;/&nbsp; <span style='color: #0b0b0b; font-weight: 600;'>Integrador MXM - Folha de Pagamento</span></div>", unsafe_allow_html=True)
 
 # Main Layout
 st.title("📊 Geração de Lançamentos Contábeis ERP MXM")
@@ -369,21 +856,63 @@ with st.sidebar:
     company_options = ["0001", "0002", "0003"]
     default_index = 0
     if pdf_company_code:
-        last_3 = pdf_company_code[-3:]
-        candidate_code = f"0{last_3}"
+        emp_nome_upper = (meta or {}).get("empresa_nome", "").upper()
+        cnpj_clean = re.sub(r"\D", "", (meta or {}).get("cnpj", ""))
+        if "JASPER" in emp_nome_upper or "PARTICIPA" in emp_nome_upper or "HOLDING" in emp_nome_upper or cnpj_clean.startswith("09436824"):
+            candidate_code = "0002"
+        elif pdf_company_code in ("03000", "0003") or "INDUSTRIA" in emp_nome_upper:
+            candidate_code = "0003"
+        elif pdf_company_code in ("03050", "0001") or "VIA PARQUE" in emp_nome_upper:
+            candidate_code = "0001"
+        elif pdf_company_code in ("03001", "0002") or "MONTE CARLO JOIAS" in emp_nome_upper:
+            candidate_code = "0002"
+        else:
+            last_3 = pdf_company_code[-3:]
+            candidate_code = f"0{last_3}"
+            
         if candidate_code in company_options:
             default_index = company_options.index(candidate_code)
         
+    company_name_map = {
+        "0001": "0001 - Monte Carlo Joias (Via Parque)",
+        "0002": "0002 - Jasper Forest Participações (Holding)",
+        "0003": "0003 - MC Indústria de Joias (Fábrica)"
+    }
     company_code_override = st.selectbox(
         "Código Empresa (MXM)", 
         options=company_options,
         index=default_index,
+        format_func=lambda x: company_name_map.get(x, x),
         help="Selecione o código da empresa (0001, 0002 ou 0003) para gerar os lançamentos."
     )
     
+    detected_proc = (meta or {}).get("tipo_processo", "folha")
+    proc_options = ["folha", "rescisao", "ferias"]
+    proc_labels = {
+        "folha": "📄 Folha de Pagamento",
+        "rescisao": "🚪 Rescisão",
+        "ferias": "🏖️ Férias"
+    }
+    default_proc_idx = proc_options.index(detected_proc) if detected_proc in proc_options else 0
+    selected_proc = st.selectbox(
+        "Tipo de Processo",
+        options=proc_options,
+        index=default_proc_idx,
+        format_func=lambda x: proc_labels.get(x, x),
+        help="Tipo de folha a ser processada. O sistema detecta automaticamente se for Rescisão ou Férias."
+    )
+    
+    ref_mes = ""
+    if meta and meta.get("periodo_referencia"):
+        try:
+            ref_mes = meta.get("periodo_referencia").split("/")[0].zfill(2)
+        except Exception:
+            pass
+    prefix_lote = "RESC" if selected_proc == "rescisao" else ("FER" if selected_proc == "ferias" else "FOLH")
+    default_lote = f"{prefix_lote}{ref_mes}" if ref_mes else f"{prefix_lote}XX"
 
-    lote_contabil = st.text_input("Lote Contábil", value="FOLHXX", max_chars=6, help="Número do lote dos lançamentos contábeis (máx. 6 caracteres).")
-    documento_id = st.text_input("Identificador Documento", value="FOLHXX", max_chars=6, help="Texto curto gravado no campo documento (máx. 6 caracteres).")
+    lote_contabil = st.text_input("Lote Contábil", value=default_lote, max_chars=6, help="Número do lote dos lançamentos contábeis (máx. 6 caracteres).")
+    documento_id = st.text_input("Identificador Documento", value=default_lote, max_chars=6, help="Texto curto gravado no campo documento (máx. 6 caracteres).")
     
     # Initialize default date in session state if not present
     if 'data_lancamento' not in st.session_state:
@@ -400,9 +929,26 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("**Sobre o Sistema:**\n"
                 "Lê o relatório PDF de Folha de Pagamento, cruza com a parametrização de contas (De-Para) e preenche automaticamente o layout de importação do MXM.")
+    
+    last_update_text = get_last_github_update()
+    st.markdown(f"""
+    <div style='text-align: center; color: #64748b; font-size: 0.78rem; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2ded7;'>
+        <b style='color: #475569;'>Equipe Contábil Monte Carlo</b><br>
+        <span style='color: #64748b;'>Última atualização (GitHub):<br><b style='color: #0b0b0b;'>{last_update_text}</b></span>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Construct company-specific config file path
-CONFIG_FILE = os.path.join(BASE_DIR, f"config_mapping_{company_code_override}.json")
+# Construct company and process-specific config file path
+if selected_proc == "rescisao":
+    CONFIG_FILE = os.path.join(BASE_DIR, f"config_mapping_{company_code_override}_rescisao.json")
+    if not os.path.exists(CONFIG_FILE) and os.path.exists(os.path.join(BASE_DIR, f"config_mapping_{company_code_override}.json")):
+        CONFIG_FILE = os.path.join(BASE_DIR, f"config_mapping_{company_code_override}.json")
+elif selected_proc == "ferias":
+    CONFIG_FILE = os.path.join(BASE_DIR, f"config_mapping_{company_code_override}_ferias.json")
+    if not os.path.exists(CONFIG_FILE) and os.path.exists(os.path.join(BASE_DIR, f"config_mapping_{company_code_override}.json")):
+        CONFIG_FILE = os.path.join(BASE_DIR, f"config_mapping_{company_code_override}.json")
+else:
+    CONFIG_FILE = os.path.join(BASE_DIR, f"config_mapping_{company_code_override}.json")
 
 # Helper to find column names flexibly
 def find_matching_column(columns, keywords):
@@ -453,7 +999,12 @@ def sync_save_mapping(new_mapping, json_path, company_code):
     """Saves mapping to JSON and synchronizes local Excel file on disk."""
     import time
     success = save_mapping(new_mapping, json_path)
-    excel_path = os.path.join(BASE_DIR, f"De-Para_Empresa_{company_code}.xlsx")
+    if "rescisao" in json_path:
+        excel_path = os.path.join(BASE_DIR, f"De-Para_Empresa_{company_code}_Rescisao.xlsx")
+    elif "ferias" in json_path:
+        excel_path = os.path.join(BASE_DIR, f"De-Para_Empresa_{company_code}_Ferias.xlsx")
+    else:
+        excel_path = os.path.join(BASE_DIR, f"De-Para_Empresa_{company_code}.xlsx")
     try:
         export_rows = []
         for code, ev_map in new_mapping.items():
@@ -472,7 +1023,12 @@ def sync_save_mapping(new_mapping, json_path, company_code):
 
 def get_company_mapping(company_code, specific_file):
     mapping = {}
-    excel_path = os.path.join(BASE_DIR, f"De-Para_Empresa_{company_code}.xlsx")
+    if "rescisao" in specific_file:
+        excel_path = os.path.join(BASE_DIR, f"De-Para_Empresa_{company_code}_Rescisao.xlsx")
+    elif "ferias" in specific_file:
+        excel_path = os.path.join(BASE_DIR, f"De-Para_Empresa_{company_code}_Ferias.xlsx")
+    else:
+        excel_path = os.path.join(BASE_DIR, f"De-Para_Empresa_{company_code}.xlsx")
     
     excel_exists = os.path.exists(excel_path)
     json_exists = os.path.exists(specific_file)
@@ -898,7 +1454,8 @@ if uploaded_pdf is not None and meta is not None:
             current_mapping, 
             batch_number=lote_contabil, 
             entry_date=formatted_date, 
-            doc_number=documento_id
+            doc_number=documento_id,
+            process_type=selected_proc
         )
         for ue in entry_results.get('unmapped_events', []):
             if 'filial' not in ue:
@@ -952,7 +1509,8 @@ if uploaded_pdf is not None and meta is not None:
                 current_mapping, 
                 batch_number=lote_contabil, 
                 entry_date=formatted_date, 
-                doc_number=documento_id
+                doc_number=documento_id,
+                process_type=selected_proc
             )
             
             for row in res['rows']:
@@ -1142,4 +1700,14 @@ else:
     """, unsafe_allow_html=True)
 
 # Footer
-st.markdown('<div class="footer">Equipe Contábil Monte Carlo</div>', unsafe_allow_html=True)
+last_update_text = get_last_github_update()
+st.markdown(f"""
+<div class="footer">
+    <div style="font-weight: 600; color: #475569; font-size: 0.95rem; margin-bottom: 4px;">
+        Equipe Contábil Monte Carlo
+    </div>
+    <div style="font-size: 0.82rem; color: #64748b;">
+        Última atualização no GitHub: <b style="color: #0b0b0b;">{last_update_text}</b>
+    </div>
+</div>
+""", unsafe_allow_html=True)

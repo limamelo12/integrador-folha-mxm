@@ -1,0 +1,134 @@
+{
+    "003": {
+        "description": "1a. Parcela Décimo Terceiro Salário",
+        "debit_account": "2140200004",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "009": {
+        "description": "Férias",
+        "debit_account": "4120300003",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "020": {
+        "description": "Periculosidade",
+        "debit_account": "nan",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "066": {
+        "description": "DSR S/Hora Extra",
+        "debit_account": "nan",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "068": {
+        "description": "Hora Extra 50%",
+        "debit_account": "nan",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "069": {
+        "description": "Hora Extra 100%",
+        "debit_account": "nan",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "100": {
+        "description": "Biênio 3%",
+        "debit_account": "nan",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "109": {
+        "description": "ADICIONAL NOTURNO",
+        "debit_account": "nan",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "113": {
+        "description": "DSR Sobre Adicional Noturno",
+        "debit_account": "nan",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "117": {
+        "description": "Bonificacao Por Servicos Prestados",
+        "debit_account": "nan",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "597": {
+        "description": "1/3 Férias",
+        "debit_account": "4120300003",
+        "credit_account": "2140100011",
+        "cost_center": "3FAB"
+    },
+    "605": {
+        "description": "Assistência Medica Titul.",
+        "debit_account": "2140100011",
+        "credit_account": "4120300008",
+        "cost_center": "3FAB"
+    },
+    "615": {
+        "description": "Assistencia Odontológica Tit.",
+        "debit_account": "2140100011",
+        "credit_account": "4120300012",
+        "cost_center": "3FAB"
+    },
+    "625": {
+        "description": "Assistência Medica Depend.",
+        "debit_account": "2140100011",
+        "credit_account": "4120300008",
+        "cost_center": "3FAB"
+    },
+    "635": {
+        "description": "Assistencia Odontológica Depend.00002",
+        "debit_account": "2140100011",
+        "credit_account": "4120300012",
+        "cost_center": "3FAB"
+    },
+    "643": {
+        "description": "Pensão Alimentícia Judicial 20%",
+        "debit_account": "2140100011",
+        "credit_account": "2140100013",
+        "cost_center": "3FAB"
+    },
+    "682": {
+        "description": "Pensão Alimentícia Judicial 25%",
+        "debit_account": "2140100011",
+        "credit_account": "2140100013",
+        "cost_center": "3FAB"
+    },
+    "714": {
+        "description": "Provisão (Crédito Trabalhador)",
+        "debit_account": "2140100011",
+        "credit_account": "4120300005",
+        "cost_center": "3FAB"
+    },
+    "902": {
+        "description": "INSS Férias",
+        "debit_account": "2140100011",
+        "credit_account": "2140200002",
+        "cost_center": "3FAB"
+    },
+    "913": {
+        "description": "IRRF Férias",
+        "debit_account": "2140100011",
+        "credit_account": "2140100007",
+        "cost_center": "3FAB"
+    },
+    "Sócios :": {
+        "description": "0",
+        "debit_account": "2140100011",
+        "credit_account": "2140200002",
+        "cost_center": "3FAB"
+    },
+    "Autônomos :": {
+        "description": "0",
+        "debit_account": "2140100011",
+        "credit_account": "2140100002",
+        "cost_center": "3FAB"
+    }
+}

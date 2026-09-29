@@ -60,6 +60,7 @@ def parse_payroll_pdf(pdf_path):
     re_empresa_simple = re.compile(r"Empresa\s*:\s*(.*)", re.IGNORECASE)
     re_cnpj = re.compile(r"(?:CNPJ|PAJ|CEI)(?:\/CEI)?\s*:\s*([\w\.\-\/]+)")
     re_periodo = re.compile(r"(?:Ref\.|Período)\s*:\s*([\d\/]+)\s*a\s*([\d\/]+)")
+    re_tipo_processo = re.compile(r"Tipo\s*Processo\s*:\s*([\w\s]+?)(?:\s+Página|\s+Pagina|\s*$)", re.IGNORECASE)
     
     # Event regexes
     # Format A (1 value + 1 quantity): 001 SALARIO BASE 12.345,67 15
@@ -129,7 +130,8 @@ def parse_payroll_pdf(pdf_path):
                                 'cnpj': '',
                                 'periodo_inicio': '',
                                 'periodo_fim': '',
-                                'periodo_referencia': ''
+                                'periodo_referencia': '',
+                                'tipo_processo': 'folha'
                             },
                             'events': [],
                             'bases': {
@@ -163,6 +165,19 @@ def parse_payroll_pdf(pdf_path):
                     parts = m_per.group(1).split('/')
                     if len(parts) == 3:
                         filiais[current_code]['metadata']['periodo_referencia'] = f"{parts[1]}/{parts[2]}"
+                        
+                # Extract Tipo Processo (Folha, Rescisão, Férias)
+                m_proc = re_tipo_processo.search(line_str)
+                if m_proc:
+                    p_val = m_proc.group(1).lower().strip()
+                    if 'rescis' in p_val:
+                        filiais[current_code]['metadata']['tipo_processo'] = 'rescisao'
+                    elif 'feria' in p_val:
+                        filiais[current_code]['metadata']['tipo_processo'] = 'ferias'
+                    elif '13' in p_val or 'decimo' in p_val:
+                        filiais[current_code]['metadata']['tipo_processo'] = 'decimo_terceiro'
+                    else:
+                        filiais[current_code]['metadata']['tipo_processo'] = 'folha'
                         
                 # Section triggers (Format B)
                 if "Valores pagos aos Funcionários" in line_str or "Valores pagos aos Funcionarios" in line_str:

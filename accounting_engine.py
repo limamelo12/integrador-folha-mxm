@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import openpyxl
 from datetime import datetime
 
@@ -24,7 +25,7 @@ def save_mapping(mapping, config_path):
         print(f"Error saving mapping: {str(e)}")
         return False
 
-def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, doc_number="FOLHA"):
+def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, doc_number="FOLHA", process_type=None):
     """
     Generates accounting entry rows based on parsed events and user mapping.
     
@@ -45,54 +46,89 @@ def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, do
     sc = parsed_data.get('social_charges', {})
     if sc:
         patronal_total = sc.get('gps_empresa_func', 0.0) + sc.get('gps_empresa_socios', 0.0) + sc.get('gps_empresa_auton', 0.0)
-        if abs(patronal_total) >= 0.01:
-            events.append({
-                'code': 'GPS_PATRONAL',
-                'description': 'INSS Patronal (Empresa)',
-                'total': patronal_total,
-                'section': 'social_charges',
-                'type': 'encargo'
-            })
-        if abs(sc.get('gps_rat', 0.0)) >= 0.01:
-            events.append({
-                'code': 'GPS_RAT',
-                'description': 'INSS RAT/FAP',
-                'total': sc['gps_rat'],
-                'section': 'social_charges',
-                'type': 'encargo'
-            })
-        if abs(sc.get('gps_terceiros', 0.0)) >= 0.01:
-            events.append({
-                'code': 'GPS_TERCEIROS',
-                'description': 'INSS Terceiros',
-                'total': sc['gps_terceiros'],
-                'section': 'social_charges',
-                'type': 'encargo'
-            })
+        gps_total = patronal_total + sc.get('gps_rat', 0.0) + sc.get('gps_terceiros', 0.0)
+        
+        # If mapping specifically maps consolidated GPS instead of detailed GPS_PATRONAL:
+        if 'GPS' in mapping and 'GPS_PATRONAL' not in mapping:
+            if abs(gps_total) >= 0.01:
+                events.append({
+                    'code': 'GPS',
+                    'description': 'INSS',
+                    'total': gps_total,
+                    'section': 'social_charges',
+                    'type': 'encargo'
+                })
+        else:
+            if abs(patronal_total) >= 0.01:
+                events.append({
+                    'code': 'GPS_PATRONAL',
+                    'description': 'INSS Patronal (Empresa)',
+                    'total': patronal_total,
+                    'section': 'social_charges',
+                    'type': 'encargo'
+                })
+            if abs(sc.get('gps_rat', 0.0)) >= 0.01:
+                events.append({
+                    'code': 'GPS_RAT',
+                    'description': 'INSS RAT/FAP',
+                    'total': sc['gps_rat'],
+                    'section': 'social_charges',
+                    'type': 'encargo'
+                })
+            if abs(sc.get('gps_terceiros', 0.0)) >= 0.01:
+                events.append({
+                    'code': 'GPS_TERCEIROS',
+                    'description': 'INSS Terceiros',
+                    'total': sc['gps_terceiros'],
+                    'section': 'social_charges',
+                    'type': 'encargo'
+                })
         if abs(sc.get('fgts_total', 0.0)) >= 0.01:
             events.append({
                 'code': 'FGTS',
-                'description': 'FGTS (Total Apurado)',
+                'description': 'FGTS',
                 'total': sc['fgts_total'],
                 'section': 'social_charges',
                 'type': 'encargo'
             })
     
-    # Definir centro de custo padrão fixo por empresa (0001 -> 1SVP, 0002 -> 2MCJ, 0003 -> 3FAB)
+    # Normalizar código da empresa (0001 -> SVP, 0002 -> 2DIR / Holding, 0003 -> MCI)
+    raw_code = str(empresa_code or meta.get('empresa_codigo', '0001')).strip()
+    emp_nome_upper = str(meta.get('empresa_nome', '')).upper()
+    cnpj_clean = re.sub(r"\D", "", str(meta.get('cnpj', '')))
+
+    if "JASPER" in emp_nome_upper or "PARTICIPA" in emp_nome_upper or "HOLDING" in emp_nome_upper or cnpj_clean.startswith("09436824") or raw_code in ('2', '0002') or '2000' in raw_code:
+        clean_empresa = '0002'
+    elif '3000' in raw_code or raw_code in ('3', '0003') or 'INDUSTRIA' in emp_nome_upper:
+        clean_empresa = '0003'
+    elif '1000' in raw_code or raw_code in ('1', '0001') or 'VIA PARQUE' in emp_nome_upper:
+        clean_empresa = '0001'
+    else:
+        clean_empresa = raw_code.zfill(4)
+
+    # Definir centro de custo padrão fixo por empresa (0001 -> 1SVP, 0002 -> 2DIR, 0003 -> 3FAB)
     STANDARD_COMPANY_CC = {
         "0001": "1SVP",
-        "0002": "2MCJ",
+        "0002": "2DIR",
         "0003": "3FAB"
     }
-    company_fixed_cc = STANDARD_COMPANY_CC.get(str(empresa_code).strip(), "1SVP")
+    COMPANY_HIST_TAG = {
+        "0001": "1SVP",
+        "0002": "2DIR",
+        "0003": "MCI"
+    }
+    company_fixed_cc = STANDARD_COMPANY_CC.get(clean_empresa, "1SVP")
+    hist_company_tag = COMPANY_HIST_TAG.get(clean_empresa, "1SVP")
         
     # Format month/year for history (e.g. 05/2026 -> MAI/26)
     mes_ano = ""
+    mes_digits = ""
     if meta.get('periodo_referencia'):
         try:
             parts = meta['periodo_referencia'].split('/')
             if len(parts) == 2:
                 mes, ano = parts[0], parts[1]
+                mes_digits = mes.zfill(2)
                 meses_pt = {
                     "01": "JAN", "02": "FEV", "03": "MAR", "04": "ABR",
                     "05": "MAI", "06": "JUN", "07": "JUL", "08": "AGO",
@@ -105,7 +141,29 @@ def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, do
             pass
     if not mes_ano:
         mes_ano = datetime.now().strftime("%b/%y").upper()
+        mes_digits = datetime.now().strftime("%m")
         
+    # Determinar tipo de processo (folha, rescisao, ferias)
+    if not process_type:
+        process_type = meta.get('tipo_processo', 'folha')
+    proc_clean = str(process_type).lower().strip()
+    
+    if 'rescis' in proc_clean:
+        hist_proc_tag = "RESC"
+        default_batch_prefix = "RESC"
+    elif 'feria' in proc_clean:
+        hist_proc_tag = "FERIAS"
+        default_batch_prefix = "FER"
+    else:
+        hist_proc_tag = "FOLHA"
+        default_batch_prefix = "FOLH"
+
+    # Default batch and doc number if generic
+    if batch_number in ["1", "", None] or str(batch_number).startswith("FOLH") or str(batch_number).startswith("RESC"):
+        batch_number = f"{default_batch_prefix}{mes_digits}" if mes_digits else default_batch_prefix
+    if doc_number in ["FOLHA", "", None] or str(doc_number).startswith("FOLH") or str(doc_number).startswith("RESC"):
+        doc_number = f"{default_batch_prefix}{mes_digits}" if mes_digits else hist_proc_tag
+
     if not entry_date:
         # Default to the end date of the period or today
         if meta.get('periodo_fim'):
@@ -143,9 +201,7 @@ def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, do
         credit_acc = ev_map.get('credit_account', '').strip()
         cc = ev_map.get('cost_center', '').strip()
         
-        # Track unmapped events (if both accounts are missing, or at least one is needed)
-        # Note: some events might intentionally map only to Debit or only to Credit in a complex entry,
-        # but in a simple event-by-event double entry, we need both.
+        # Track unmapped events
         if not debit_acc or not credit_acc:
             unmapped_events.append({
                 'code': code,
@@ -155,27 +211,52 @@ def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, do
                 'credit_missing': not credit_acc
             })
             
+        # Format history according to company historical pattern
+        # For social charges in Empresa 0003: "INSS" or "FGTS"
+        if str(code).startswith('GPS_'):
+            event_name_hist = "INSS" if clean_empresa == "0003" else desc.upper().strip()
+        elif str(code) == 'FGTS':
+            event_name_hist = "FGTS"
+        else:
+            event_name_hist = desc.upper().strip()
+
+        # Check if custom history is defined in mapping or specific to Empresa 0002 (Holding)
+        custom_hist = str(ev_map.get('historico', '')).strip()
+        if custom_hist:
+            hist_entry = custom_hist[:200]
+        elif clean_empresa == "0002":
+            if "INSS" in desc.upper() or str(code).startswith('GPS_'):
+                hist_entry = "PELO VALOR DE INSS S/ PRO LABORE CONF FOLHA"
+            elif "IRRF" in desc.upper():
+                hist_entry = "PELO VALOR DE IRRF S/ PRO LABORE CONF FOLHA"
+            else:
+                hist_entry = "PELO VALOR DE PRO LABORE CONF FOLHA"
+        else:
+            # Pattern: <EVENTO>-<PROC> <TAG> - <MES>/<ANO> (ex: SALDO DE SALÁRIO-RESC MCI - AGO/26 ou SALÁRIO BASE-FOLHA MCI - AGO/26)
+            hist_entry = f"{event_name_hist}-{hist_proc_tag} {hist_company_tag} - {mes_ano}".upper()[:200]
+            
+        if clean_empresa == "0002":
+            num_titulo = ""
+        else:
+            num_titulo = f"{hist_proc_tag} {hist_company_tag} - {mes_ano}".upper()[:50]
+            
         # Leg 1: Debit Row
         if debit_acc:
             clean_debit = debit_acc.replace(".", "").strip()
             use_cc_debit = (company_fixed_cc if company_fixed_cc else cc) if (clean_debit.startswith('3') or clean_debit.startswith('4') or clean_debit.startswith('5')) else None
             
-            # Format history: DESCRIÇÃO CÓD DA FOLHA + FOLHA + CENTRO DE CUSTO + MES E ANO in uppercase
-            cc_suffix = f" {use_cc_debit}" if use_cc_debit else ""
-            hist_debit = f"{desc}-FOLHA{cc_suffix} - {mes_ano}".upper()
-            hist_debit = hist_debit[:200]
-            
             rows.append({
-                'empresa': empresa_code,
+                'empresa': clean_empresa,
                 'lote': batch_number,
                 'data': entry_date,
                 'documento': doc_number,
                 'conta': debit_acc,
                 'cc': use_cc_debit if use_cc_debit else None,
                 'tipo': 'D',
-                'historico': hist_debit,
+                'historico': hist_entry,
                 'valor': amount,
-                'sequencia': sequence
+                'sequencia': sequence,
+                'numero_titulo': num_titulo
             })
             total_debit += amount
             sequence += 1
@@ -185,22 +266,18 @@ def generate_entries(parsed_data, mapping, batch_number="1", entry_date=None, do
             clean_credit = credit_acc.replace(".", "").strip()
             use_cc_credit = (company_fixed_cc if company_fixed_cc else cc) if (clean_credit.startswith('3') or clean_credit.startswith('4') or clean_credit.startswith('5')) else None
             
-            # Format history: DESCRIÇÃO CÓD DA FOLHA + FOLHA + CENTRO DE CUSTO + MES E ANO in uppercase
-            cc_suffix = f" {use_cc_credit}" if use_cc_credit else ""
-            hist_credit = f"{desc}-FOLHA{cc_suffix} - {mes_ano}".upper()
-            hist_credit = hist_credit[:200]
-            
             rows.append({
-                'empresa': empresa_code,
+                'empresa': clean_empresa,
                 'lote': batch_number,
                 'data': entry_date,
                 'documento': doc_number,
                 'conta': credit_acc,
                 'cc': use_cc_credit if use_cc_credit else None,
                 'tipo': 'C',
-                'historico': hist_credit,
+                'historico': hist_entry,
                 'valor': amount,
-                'sequencia': sequence
+                'sequencia': sequence,
+                'numero_titulo': num_titulo
             })
             total_credit += amount
             sequence += 1
@@ -226,11 +303,13 @@ def write_to_excel_template(template_path, output_path, entries_data):
         
     wb = openpyxl.load_workbook(template_path)
     
-    # Ensure sheet 'Dados' exists
-    if 'Dados' not in wb.sheetnames:
-        raise ValueError("Sheet 'Dados' not found in the Excel template.")
-        
-    sheet = wb['Dados']
+    # Ensure sheet 'Dados' or 'Preencher' exists
+    if 'Dados' in wb.sheetnames:
+        sheet = wb['Dados']
+    elif 'Preencher' in wb.sheetnames:
+        sheet = wb['Preencher']
+    else:
+        sheet = wb.active
     
     # Clear existing data rows under header
     # Header is on row 1. Let's delete all rows from row 2 onwards.
@@ -265,7 +344,8 @@ def write_to_excel_template(template_path, output_path, entries_data):
     for entry in entries_data:
         row_idx = sheet.max_row + 1
         
-        sheet.cell(row=row_idx, column=1, value=str(entry['empresa'])[:4])
+        emp_val = str(entry['empresa']).zfill(4)
+        sheet.cell(row=row_idx, column=1, value=emp_val)
         sheet.cell(row=row_idx, column=2, value=str(entry['lote'])[:6])
         sheet.cell(row=row_idx, column=3, value=str(entry['data'])[:8])
         sheet.cell(row=row_idx, column=4, value=str(entry['documento'])[:6] if entry['documento'] else "")
@@ -287,8 +367,15 @@ def write_to_excel_template(template_path, output_path, entries_data):
         # Column M (13) is Sequencia
         sheet.cell(row=row_idx, column=13, value=int(entry['sequencia']))
         
-        # Fill rest of columns as blank or empty strings
-        for c in range(14, 24):
+        # Fill non-title columns as blank
+        for c in [14, 15, 16]:
+            sheet.cell(row=row_idx, column=c, value="")
+            
+        # Column Q (17) is Numero do Titulo
+        sheet.cell(row=row_idx, column=17, value=str(entry.get('numero_titulo', ''))[:50])
+        
+        # Remaining columns (18 to 23) as blank
+        for c in range(18, 24):
             sheet.cell(row=row_idx, column=c, value="")
             
     wb.save(output_path)
