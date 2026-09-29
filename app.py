@@ -412,18 +412,19 @@ def render_home_page():
     st.markdown("<p style='color: #64748b; margin-top: -10px; margin-bottom: 20px;'>Selecione uma das automações contábeis abaixo para iniciar:</p>", unsafe_allow_html=True)
     
     # Cards Grid (2 columns layout)
-    col1, col2 = st.columns(2)
+    # Cards Grid (3 columns layout)
+    col1, col2, col3 = st.columns(3)
     
     with col1:
         # Card 1: Integrador de Folha (MXM) - Active
         st.markdown("""
-        <div class="custom-card" style='border-left: 4px solid #047857; min-height: 290px;'>
+        <div class="custom-card" style='border-left: 4px solid #047857; min-height: 310px;'>
             <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
                 <div style='font-size: 1.6rem;'>📊</div>
                 <span class='badge-active'>🟢 Operacional</span>
             </div>
             <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Integrador de Folha de Pagamento</h4>
-            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
+            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 65px;'>
                 Importação de relatórios Alterdata e geração automática do layout contábil MXM com cruzamento De-Para e conciliação de encargos.
             </p>
             <div style='margin-bottom: 18px;'>
@@ -431,7 +432,7 @@ def render_home_page():
                 <span class='tag-chip'>Rescisão</span>
                 <span class='tag-chip'>Férias</span>
                 <span class='tag-chip'>Pró-Labore</span>
-                <span class='tag-chip'>Empresas 0001, 0002, 0003</span>
+                <span class='tag-chip'>0001, 0002, 0003</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -439,41 +440,39 @@ def render_home_page():
             st.session_state.current_page = "folha"
             st.rerun()
 
-        st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-
-        # Card 3: Conciliação Bancária & Cartões
+    with col2:
+        # Card 2: Fechamento Contábil & Auditoria
         st.markdown("""
-        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 290px;'>
+        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 310px;'>
             <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
-                <div style='font-size: 1.6rem;'>🏦</div>
+                <div style='font-size: 1.6rem;'>📋</div>
                 <span class='badge-soon'>🟡 Em Desenvolvimento</span>
             </div>
-            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Conciliação Bancária & Cartões</h4>
-            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
-                Confronto e conciliação de arquivos OFX bancários e relatórios de adquirentes (Cielo, Rede, Stone) contra o razão contábil do MXM.
+            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Fechamento Contábil & Auditoria</h4>
+            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 65px;'>
+                Checklist inteligente de encerramento mensal, batimento de saldos patrimoniais, conciliação Intercompany e pré-validação de balancete.
             </p>
             <div style='margin-bottom: 18px;'>
-                <span class='tag-chip'>Extratos OFX</span>
-                <span class='tag-chip'>Adquirentes Loja</span>
-                <span class='tag-chip'>Tarifas Bancárias</span>
+                <span class='tag-chip'>Checklist Mensal</span>
+                <span class='tag-chip'>Intercompany</span>
+                <span class='tag-chip'>Auditoria de Contas</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_bancario", use_container_width=True):
-            st.session_state.current_page = "bancario"
+        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_fechamento", use_container_width=True):
+            st.session_state.current_page = "fechamento"
             st.rerun()
 
-        st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-
-        # Card 5: Ativo Imobilizado & Depreciação
+    with col3:
+        # Card 3: Ativo Imobilizado & Depreciação
         st.markdown("""
-        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 290px;'>
+        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 310px;'>
             <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
                 <div style='font-size: 1.6rem;'>🏭</div>
                 <span class='badge-soon'>🟡 Em Desenvolvimento</span>
             </div>
             <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Ativo Imobilizado & Depreciação</h4>
-            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
+            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 65px;'>
                 Controle patrimonial de máquinas da fábrica (3FAB) e benfeitorias em lojas de shopping, com cálculo e geração automática de quotas mensais.
             </p>
             <div style='margin-bottom: 18px;'>
@@ -485,53 +484,6 @@ def render_home_page():
         """, unsafe_allow_html=True)
         if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_ativo", use_container_width=True):
             st.session_state.current_page = "ativo"
-            st.rerun()
-
-    with col2:
-        # Card 2: Fiscal & Tributário
-        st.markdown("""
-        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 290px;'>
-            <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
-                <div style='font-size: 1.6rem;'>⚖️</div>
-                <span class='badge-soon'>🟡 Em Desenvolvimento</span>
-            </div>
-            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Módulo Fiscal & Tributário</h4>
-            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
-                Conciliação de retenções na fonte (IRRF, PIS/COFINS/CSLL, ISS), apuração de tributos diretos e indiretos e geração de provisões fiscais.
-            </p>
-            <div style='margin-bottom: 18px;'>
-                <span class='tag-chip'>Retenções Fonte</span>
-                <span class='tag-chip'>DIFAL / ICMS</span>
-                <span class='tag-chip'>Provisões de Impostos</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_fiscal", use_container_width=True):
-            st.session_state.current_page = "fiscal"
-            st.rerun()
-
-        st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-
-        # Card 4: Fechamento Contábil & Auditoria
-        st.markdown("""
-        <div class="custom-card" style='border-left: 4px solid #cbd5e1; min-height: 290px;'>
-            <div style='display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;'>
-                <div style='font-size: 1.6rem;'>📋</div>
-                <span class='badge-soon'>🟡 Em Desenvolvimento</span>
-            </div>
-            <h4 style='margin-bottom: 6px; font-size: 1.2rem; color: #0b0b0b;'>Fechamento Contábil & Auditoria</h4>
-            <p style='color: #475569; font-size: 0.88rem; line-height: 1.45; min-height: 55px;'>
-                Checklist inteligente de encerramento mensal, batimento de saldos patrimoniais, conciliação Intercompany e pré-validação de balancete.
-            </p>
-            <div style='margin-bottom: 18px;'>
-                <span class='tag-chip'>Checklist Fechamento</span>
-                <span class='tag-chip'>Intercompany</span>
-                <span class='tag-chip'>Auditoria de Contas</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Ver Detalhes do Módulo ➔", key="btn_hub_fechamento", use_container_width=True):
-            st.session_state.current_page = "fechamento"
             st.rerun()
 
     # Bottom Information Panel
@@ -563,28 +515,6 @@ def render_home_page():
 
 def render_module_placeholder(page_key):
     details = {
-        "fiscal": {
-            "title": "Módulo Fiscal & Apuração de Tributos",
-            "icon": "⚖️",
-            "desc": "Automação do fechamento fiscal, conferência de retenções na fonte e provisões contábeis de tributos diretos e indiretos.",
-            "items": [
-                "Importação de relatórios de retenções (IRRF, PIS, COFINS, CSLL, ISS) com conciliação contra fornecedores",
-                "Geração automática de lançamentos contábeis de provisão de impostos no layout MXM",
-                "Confronto entre notas fiscais tomadas/prestadas e o razão de impostos a recolher",
-                "Suporte a regras tributárias de lojas de shopping e fábrica"
-            ]
-        },
-        "bancario": {
-            "title": "Conciliação Bancária & Cartões",
-            "icon": "🏦",
-            "desc": "Confronto eletrônico de extratos bancários e arquivos de adquirentes com as contas patrimoniais do ERP MXM.",
-            "items": [
-                "Leitura de arquivos OFX de todos os bancos conveniados da Monte Carlo",
-                "Importação de relatórios de adquirentes (Cielo, Rede, Stone) com conciliação de taxas e recebimentos",
-                "Identificação de pendências bancárias não lançadas na contabilidade",
-                "Geração de lançamentos de tarifas e juros bancários no MXM"
-            ]
-        },
         "fechamento": {
             "title": "Fechamento Contábil & Auditoria",
             "icon": "📋",
@@ -673,8 +603,6 @@ with st.sidebar:
     nav_options = [
         ("home", "🏠 Início (Hub de Rotinas)"),
         ("folha", "📊 Folha de Pagamento (MXM)"),
-        ("fiscal", "⚖️ Fiscal & Tributário"),
-        ("bancario", "🏦 Conciliação Bancária"),
         ("fechamento", "📋 Fechamento Contábil"),
         ("ativo", "🏭 Ativo Imobilizado")
     ]
