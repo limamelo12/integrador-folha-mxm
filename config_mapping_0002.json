@@ -1,0 +1,537 @@
+{
+    "001": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "007": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "009": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "015": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "020": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "025": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "055": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "066": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "067": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "068": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "069": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "071": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "082": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "086": {
+        "debit_account": "5110100016",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "093": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "100": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "102": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "117": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "126": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "129": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "147": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "200": {
+        "debit_account": "2140100005",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "230": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "400": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "406": {
+        "debit_account": "2140100001",
+        "credit_account": "1140100008",
+        "cost_center": ""
+    },
+    "412": {
+        "debit_account": "5110100006",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "414": {
+        "debit_account": "5110100006",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "420": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "445": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "446": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "447": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "449": {
+        "debit_account": "5110100007",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "490": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "491": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "492": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "495": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100001",
+        "cost_center": ""
+    },
+    "497": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "500": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "501": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "502": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "504": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "505": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "509": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "597": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "599": {
+        "debit_account": "2140100005",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "602": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100001",
+        "cost_center": ""
+    },
+    "604": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100015",
+        "cost_center": ""
+    },
+    "605": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100017",
+        "cost_center": ""
+    },
+    "608": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "609": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100001",
+        "cost_center": ""
+    },
+    "612": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "614": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "615": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100021",
+        "cost_center": ""
+    },
+    "619": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "621": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100016",
+        "cost_center": ""
+    },
+    "622": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "625": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100017",
+        "cost_center": ""
+    },
+    "626": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100001",
+        "cost_center": ""
+    },
+    "630": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "635": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100021",
+        "cost_center": ""
+    },
+    "643": {
+        "debit_account": "2140100001",
+        "credit_account": "2140100013",
+        "cost_center": ""
+    },
+    "664": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "665": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "667": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "692": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100017",
+        "cost_center": ""
+    },
+    "702": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "704": {
+        "debit_account": "2140100001",
+        "credit_account": "1140100008",
+        "cost_center": ""
+    },
+    "705": {
+        "debit_account": "2140100001",
+        "credit_account": "1140100008",
+        "cost_center": ""
+    },
+    "708": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100001",
+        "cost_center": ""
+    },
+    "709": {
+        "debit_account": "2140100001",
+        "credit_account": "2140100002",
+        "cost_center": ""
+    },
+    "714": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "716": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100001",
+        "cost_center": ""
+    },
+    "900": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "901": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "902": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "903": {
+        "debit_account": "2140100001",
+        "credit_account": "2140100005",
+        "cost_center": ""
+    },
+    "913": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "914": {
+        "debit_account": "2140100001",
+        "credit_account": "2140100007",
+        "cost_center": ""
+    },
+    "998": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "GPS_PATRONAL": {
+        "debit_account": "5110100013",
+        "credit_account": "2140100005",
+        "cost_center": ""
+    },
+    "GPS_RAT": {
+        "debit_account": "5110100013",
+        "credit_account": "2140100005",
+        "cost_center": ""
+    },
+    "GPS_TERCEIROS": {
+        "debit_account": "5110100013",
+        "credit_account": "2140100005",
+        "cost_center": ""
+    },
+    "FGTS": {
+        "debit_account": "5110100014",
+        "credit_account": "2140100002",
+        "cost_center": ""
+    },
+    "109": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "113": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "128": {
+        "debit_account": "5110100016",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "603": {
+        "debit_account": "2140100001",
+        "credit_account": "2140100013",
+        "cost_center": ""
+    },
+    "689": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100021",
+        "cost_center": ""
+    },
+    "002": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100010",
+        "cost_center": ""
+    },
+    "013": {
+        "debit_account": "2140100010",
+        "credit_account": "2140100005",
+        "cost_center": ""
+    },
+    "014": {
+        "debit_account": "2140100010",
+        "credit_account": "2140100008",
+        "cost_center": ""
+    },
+    "003": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "032": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "033": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "094": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "105": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "107": {
+        "debit_account": "5110100001",
+        "credit_account": "2140100001",
+        "cost_center": ""
+    },
+    "110": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "398": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "637": {
+        "debit_account": "2140100001",
+        "credit_account": "5110100015",
+        "cost_center": ""
+    },
+    "691": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "717": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "718": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "719": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "910": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "911": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "925": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    }
+}

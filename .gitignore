@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.tmp
+
+# Sensitive data / personal payroll PDFs
+*.pdf
+.user_uploaded/
+
+# Local tests
+check_import.py
+check_rows.py
+
+# Streamlit secrets (if created locally)
+.streamlit/secrets.toml

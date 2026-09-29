@@ -1,0 +1,302 @@
+{
+    "001": {
+        "debit_account": "3.1.01.01.0001",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "067": {
+        "debit_account": "3.1.01.02.0001",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "086": {
+        "debit_account": "3.1.01.02.0002",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "129": {
+        "debit_account": "3.1.01.02.0003",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "400": {
+        "debit_account": "3.1.01.01.0011",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "412": {
+        "debit_account": "3.1.01.01.0011",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "414": {
+        "debit_account": "3.1.01.01.0005",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "420": {
+        "debit_account": "3.1.01.01.0005",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "447": {
+        "debit_account": "3.1.01.02.0003",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "604": {
+        "debit_account": "2140100001",
+        "credit_account": "3.1.01.02.0001",
+        "cost_center": "1001"
+    },
+    "605": {
+        "debit_account": "2140100001",
+        "credit_account": "2.1.02.02.0005",
+        "cost_center": "1001"
+    },
+    "609": {
+        "debit_account": "2140100001",
+        "credit_account": "1.1.05.01.0001",
+        "cost_center": "1001"
+    },
+    "615": {
+        "debit_account": "2140100001",
+        "credit_account": "2.1.02.02.0005",
+        "cost_center": "1001"
+    },
+    "621": {
+        "debit_account": "2140100001",
+        "credit_account": "3.1.01.02.0002",
+        "cost_center": "1001"
+    },
+    "625": {
+        "debit_account": "2140100001",
+        "credit_account": "2.1.02.02.0005",
+        "cost_center": "1001"
+    },
+    "635": {
+        "debit_account": "2140100001",
+        "credit_account": "2.1.02.02.0005",
+        "cost_center": "1001"
+    },
+    "692": {
+        "debit_account": "2140100001",
+        "credit_account": "2.1.02.02.0005",
+        "cost_center": "1001"
+    },
+    "704": {
+        "debit_account": "2140100001",
+        "credit_account": "1.1.05.02.0001",
+        "cost_center": "1001"
+    },
+    "705": {
+        "debit_account": "2140100001",
+        "credit_account": "1.1.05.02.0002",
+        "cost_center": "1001"
+    },
+    "709": {
+        "debit_account": "2140100001",
+        "credit_account": "1.1.05.03.0002",
+        "cost_center": "1001"
+    },
+    "903": {
+        "debit_account": "2140100001",
+        "credit_account": "2.1.02.02.0002",
+        "cost_center": "1001"
+    },
+    "914": {
+        "debit_account": "2140100001",
+        "credit_account": "2.1.02.02.0003",
+        "cost_center": "1001"
+    },
+    "998": {
+        "debit_account": "1.1.05.01.0001",
+        "credit_account": "2140100001",
+        "cost_center": "1001"
+    },
+    "GPS_PATRONAL": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "GPS_RAT": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "GPS_TERCEIROS": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "FGTS": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "002": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "013": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "014": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "015": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "020": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "025": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "055": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "066": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "068": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "069": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "071": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "082": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "100": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "109": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "113": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "117": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "126": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "128": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "147": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "200": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "230": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "445": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "446": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "449": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "495": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "599": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "602": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "603": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "626": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "643": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "702": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "708": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    },
+    "716": {
+        "debit_account": "",
+        "credit_account": "",
+        "cost_center": ""
+    }
+}
