@@ -302,6 +302,69 @@ st.markdown("""
         color: #0b0b0b !important;
     }
 
+    /* ========================================================= */
+    /* Executive SaaS Navigation Cards in Sidebar               */
+    /* ========================================================= */
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] > label {
+        display: none !important; /* Hide widget label */
+    }
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding-top: 2px !important;
+    }
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label {
+        background-color: #ffffff !important;
+        border: 1px solid #e2ded7 !important;
+        border-radius: 10px !important;
+        padding: 12px 14px !important;
+        cursor: pointer !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+        margin: 0 !important;
+    }
+    /* Suppress the default radio circle completely */
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label > div:first-child {
+        display: none !important;
+    }
+    /* Typography inside inactive items */
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label p {
+        font-size: 0.90rem !important;
+        font-weight: 500 !important;
+        color: #334155 !important;
+        margin: 0 !important;
+        letter-spacing: -0.01em !important;
+        transition: color 0.15s ease !important;
+    }
+    /* Hover state for inactive items */
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
+        background-color: #f8fafc !important;
+        border-color: #0b0b0b !important;
+        transform: translateX(4px) !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
+    }
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:hover p {
+        color: #0b0b0b !important;
+    }
+    /* Active selected SaaS Item */
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked),
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label[data-checked="true"] {
+        background-color: #0b0b0b !important;
+        border-color: #0b0b0b !important;
+        border-left: 5px solid #ffc220 !important;
+        box-shadow: 0 4px 14px rgba(11, 11, 11, 0.22) !important;
+        transform: translateX(2px) !important;
+    }
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) p,
+    section[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label[data-checked="true"] p {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
     /* Footer */
     .footer {
         text-align: center;
@@ -386,7 +449,6 @@ def render_home_page():
             &nbsp;|&nbsp; Portal de Automações Contábeis
         </div>
         <div style='display: flex; gap: 15px; align-items: center;'>
-            <span>🏢 Empresas Ativas: <b>0001, 0002, 0003</b></span>
             <span style='background: #ecfdf5; color: #047857; font-weight: 600; padding: 2px 10px; border-radius: 9999px; font-size: 0.75rem; border: 1px solid #a7f3d0;'>🟢 ERP MXM Online</span>
         </div>
     </div>
@@ -432,7 +494,6 @@ def render_home_page():
                 <span class='tag-chip'>Rescisão</span>
                 <span class='tag-chip'>Férias</span>
                 <span class='tag-chip'>Pró-Labore</span>
-                <span class='tag-chip'>0001, 0002, 0003</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -492,7 +553,7 @@ def render_home_page():
     <div style='background: #ffffff; border: 1px solid #e2ded7; border-radius: 12px; padding: 20px; display: flex; justify-content: space-around; align-items: center; text-align: center;'>
         <div>
             <div style='font-size: 1.5rem; font-weight: 700; color: #0b0b0b;'>3</div>
-            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Empresas Parametrizadas</div>
+            <div style='font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase;'>Módulos Contábeis</div>
         </div>
         <div style='border-left: 1px solid #e2ded7; height: 35px;'></div>
         <div>
@@ -614,7 +675,7 @@ with st.sidebar:
         current_page = 'home'
     default_nav_idx = nav_keys.index(current_page)
     
-    st.markdown("<p style='font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;'>Menu de Navegação</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 0.72rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;'>MÓDULOS DE ROTINAS</p>", unsafe_allow_html=True)
     sel_page = st.radio(
         "Menu de Módulos",
         options=nav_keys,
@@ -632,8 +693,6 @@ with st.sidebar:
     if st.session_state.current_page == "home":
         st.markdown("**Sobre o Portal:**\n"
                     "Ambiente unificado de automações da **Equipe Contábil Monte Carlo**, integrando relatórios do Alterdata diretamente ao layout do ERP MXM.")
-        st.markdown("<br><p style='font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 4px;'>Empresas Habilitadas:</p>"
-                    "<span style='font-size: 0.85rem; color: #1e293b;'>• <b>0001</b> - Via Parque (1SVP)<br>• <b>0002</b> - Holding (2DIR)<br>• <b>0003</b> - Fábrica (3FAB)</span>", unsafe_allow_html=True)
         st.markdown("---")
         last_update_text = get_last_github_update()
         st.markdown(f"""
